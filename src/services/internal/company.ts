@@ -1,4 +1,4 @@
-import { database } from "../helpers/prisma";
+import { database } from "../../helpers";
 
 /**
  * Creates a New Company

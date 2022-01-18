@@ -209,3 +209,10 @@ model Image {
 // }
 
 //TODO: model that allows users to vote on rarity delegation
+
+// Reference Table for Publish Status
+// Deleted, Published, Not Published
+// model PublishStatus {
+//   id  Int @id
+//   label String @db.VarChar(15)
+// }

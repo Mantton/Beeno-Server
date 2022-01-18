@@ -2,7 +2,7 @@ import express from "express";
 import helmet from "helmet";
 import { initializeFirebaseAdmin } from "./helpers/firebase";
 import { companyRouter } from "./routes";
-import { createSuperUser } from "./services";
+import { createSuperUser } from "./services/";
 import logger from "./utils/logger";
 
 const app = express();

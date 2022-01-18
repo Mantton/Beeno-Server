@@ -1,5 +1,5 @@
-import { privileges } from "../config/constants";
-import { database } from "../helpers";
+import { privileges } from "../../config/constants";
+import { database } from "../../helpers";
 
 export const getAccountPrivileges = async (id: number) => {
   const leges = await database.privilege.findMany({

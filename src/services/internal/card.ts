@@ -1,4 +1,4 @@
-import { database } from "../helpers/prisma";
+import { database } from "../../helpers";
 
 export const generateAndInsertCards = async (
   setId: number,

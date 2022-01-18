@@ -1,5 +1,4 @@
-import { database } from "../helpers/prisma";
-
+import { database } from "../../helpers";
 /**
  * Saves an Image address to the database
  * @param url The URL of the image
