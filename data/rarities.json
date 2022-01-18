@@ -1,0 +1,37 @@
+[
+    {
+        "label": "Common",
+        "points": 10,
+        "hex": "C0C0C0"
+    },
+    {
+        "label": "Uncommon",
+        "points": 50,
+        "hex": "00FF00"
+    },
+    {
+        "label": "Rare",
+        "points": 100,
+        "hex": "0000FF"
+    },
+    {
+        "label": "Ultra Rare",
+        "points": 500,
+        "hex": "E6E6FA"
+    },
+    {
+        "label": "Legendary",
+        "points": 1000,
+        "hex": "FFDC73"
+    },
+    {
+        "label": "Ascended",
+        "points": 5000,
+        "hex": "FFBF00"
+    },
+    {
+        "label": "Omnipotent",
+        "points": 10000,
+        "hex": "00C0F0"
+    }
+]

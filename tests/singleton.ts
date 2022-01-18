@@ -1,6 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import { mockDeep, mockReset, DeepMockProxy } from "jest-mock-extended";
-import database from "../src/helpers/prisma";
+import { database } from "../src/helpers/prisma";
 
 /**
  * The singleton file tells Jest to mock a default export (the Prisma client instantiated in ../src/helpers/prisma),
@@ -8,7 +8,7 @@ import database from "../src/helpers/prisma";
  *  It then resets the mocked instance before each test is run.
  * @link https://www.prisma.io/docs/guides/testing/unit-testing
  */
-jest.mock("../helpers/prisma", () => ({
+jest.mock("../src/helpers/prisma", () => ({
   __esModule: true,
   default: mockDeep<PrismaClient>(),
 }));

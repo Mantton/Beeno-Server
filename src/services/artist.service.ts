@@ -1,8 +1,8 @@
-import database from "../helpers/prisma";
+import { database } from "../helpers/prisma";
 
-export const createArtist = async (
+export const insertArtistRecord = async (
   name: string,
-  groupId: string | null,
+  groupId: number | null,
   companyId: number,
   imageId: number
 ) => {

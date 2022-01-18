@@ -11,31 +11,28 @@ generator client {
 
 // Core Models
 model Account {
-  id          String   @id @unique @default(uuid()) @db.Uuid
-  handle      String   @unique @db.VarChar(18)
-  dateCreated DateTime @default(now())
-  isVerified  Boolean  @default(false) // sign up with valid phone number
-
-
+  id              Int          @id @default(autoincrement())
+  firebaseId      String       @unique // Firebase user UID
+  handle          String       @unique @db.VarChar(18)
+  dateCreated     DateTime     @default(now())
+  verified        Boolean      @default(false)
   // Relations
   cards           Card[]
   initiatedTrades TradeOffer[] @relation("initiator")
   receivedTrades  TradeOffer[] @relation("recipient")
-  TradePiece      TradePiece[]
-  profile         Profile?
-  Roll            Roll[]
+  tradePieces     TradePiece[]
 
+  privileges Privilege[]
   @@map("accounts")
 }
 
-model Profile {
-  accountId   String @unique @db.Uuid
-  displayName String @db.VarChar(25)
-  // Header Image, Profile Image, color scheme and the gist
+model Privilege {
+  privilege Int
+  accountId Int
 
   account Account @relation(fields: [accountId], references: [id])
-
-  @@map("profiles")
+  @@unique([accountId, privilege])
+  @@map("privileges")
 }
 
 model Company {
@@ -51,7 +48,7 @@ model Company {
 }
 
 model Group {
-  id        String   @id @unique @default(uuid()) @db.Uuid
+  id        Int      @id @default(autoincrement())
   name      String   @unique @db.VarChar(30)
   companyId Int
   members   Artist[]
@@ -64,8 +61,8 @@ model Group {
 }
 
 model Artist {
-  id        String  @id @unique @default(uuid()) @db.Uuid
-  groupId   String? @db.Uuid
+  id        Int  @id @default(autoincrement())
+  groupId   Int?
   companyId Int
 
   name  String @db.VarChar(20)
@@ -75,78 +72,90 @@ model Artist {
   group   Group?  @relation(fields: [groupId], references: [id])
   company Company @relation(fields: [companyId], references: [id])
 
-  cardReferences CardArtist[]
-  imageId        Int?
+  references CardSetArtist[]
+  imageId    Int?
+  soloEras   Era[]
   @@unique([name, groupId])
   @@map("artists")
 }
 
 model Era {
-  id        String    @id @default(uuid()) @db.Uuid
+  id        Int       @id @default(autoincrement())
   title     String    @db.VarChar(50) // Title Song Name e.g How You Like That
   startDate DateTime? // Release Date
-  groupId   String    @db.Uuid
+  groupId   Int?
+  artistId  Int?
 
 
 
-  group Group  @relation(fields: [groupId], references: [id])
-  cards Card[]
+  group  Group?    @relation(fields: [groupId], references: [id])
+  artist Artist?   @relation(fields: [artistId], references: [id])
+  sets   CardSet[]
   @@unique([title, groupId])
   @@map("eras")
 }
 
 model Card {
-  id       String   @id @default(uuid()) @db.Uuid
-  ownerId  String?  @db.Uuid
-  rarityId Int
-  imageId  Int      @unique
-  minted   DateTime @default(now())
-  rollId   Int? // Initial Roll
+  id      Int  @id @default(autoincrement())
+  ownerId Int?
 
   // Name Identifiers:  Era.title - Artist Name Conjunction - Version - Iteration e.g "HYLT Rosé Version 5 #453"
   iteration Int
-  version   Int
-  eraId     String @db.Uuid
+  setId     Int
+
 
   // Relations
-  rarity Rarity   @relation(fields: [rarityId], references: [id])
-  owner  Account? @relation(fields: [ownerId], references: [id])
-  image  Image    @relation(fields: [imageId], references: [id])
-  roll   Roll?    @relation(fields: [rollId], references: [id])
-  era    Era      @relation(fields: [eraId], references: [id])
-
+  owner        Account?     @relation(fields: [ownerId], references: [id])
+  set          CardSet      @relation(fields: [setId], references: [id])
   pieceHistory TradePiece[]
-
-  artists CardArtist[]
-  @@unique([eraId, version, iteration])
+  @@unique([setId, iteration])
   @@map("cards")
 }
 
-model CardArtist {
-  cardId   String @db.Uuid
-  artistId String @db.Uuid
+model CardSet {
+  id     Int      @id @default(autoincrement())
+  title  String   @db.VarChar(25)
+  minted DateTime @default(now())
 
-  card   Card   @relation(fields: [cardId], references: [id])
-  artist Artist @relation(fields: [artistId], references: [id])
+  eraId    Int
+  rarityId Int
+  imageId  Int
 
-  @@id([cardId, artistId])
-  @@unique([cardId, artistId])
-  @@map("card_artists")
+  artists CardSetArtist[]
+  cards   Card[]
+  era     Era             @relation(fields: [eraId], references: [id])
+  rarity  Rarity          @relation(fields: [rarityId], references: [id])
+  image   Image           @relation(fields: [imageId], references: [id])
+
+  @@map("cardsets")
+}
+
+model CardSetArtist {
+  setId    Int
+  artistId Int
+
+  set    CardSet @relation(fields: [setId], references: [id])
+  artist Artist  @relation(fields: [artistId], references: [id])
+
+  @@id([setId, artistId])
+  @@unique([setId, artistId])
+  @@map("cardset_artists")
 }
 
 model Rarity {
-  id     Int    @id @unique @default(autoincrement())
-  label  String @unique @db.VarChar(18)
-  points Int    @unique
-  cards  Card[]
+  id     Int       @id @unique @default(autoincrement())
+  label  String    @unique @db.VarChar(18)
+  points Int       @unique
+  hex    String    @db.VarChar(6)
+  sets   CardSet[]
 
   @@map("rarity")
 }
 
 model TradeOffer {
   id                   Int      @id @unique @default(autoincrement())
-  initiatorId          String   @db.Uuid
-  recipientId          String   @db.Uuid
+  initiatorId          Int
+  recipientId          Int
   initationTimestamp   DateTime @default(now()) // Initation Time 
   convocationTimestamp DateTime // Convocation Time i.e the timestamp for when the recipient makes a decision on the offer
 
@@ -167,9 +176,9 @@ model TradeOffer {
 }
 
 model TradePiece {
-  cardId       String  @db.Uuid
+  cardId       Int
   tradeOfferId Int
-  accountId    String  @db.Uuid
+  accountId    Int
   isLocked     Boolean @default(false) // Whether or not this card can be removed from subsequest counter offers
 
 
@@ -182,25 +191,21 @@ model TradePiece {
   @@map("trade_pieces")
 }
 
-model Roll {
-  id        Int      @id @default(autoincrement())
-  accountId String   @db.Uuid
-  timestamp DateTime @default(now())
-  cards     Card[]
-  byAccount Account  @relation(fields: [accountId], references: [id])
-
-  @@map("rolls")
-}
-
 model Image {
-  id    Int    @id @unique @default(autoincrement())
-  base  String
-  cards Card[] // Image Can be used by a set of cards
+  id      Int       @id @unique @default(autoincrement())
+  base    String
+  company Company[]
+  groups  Group[]
+  artists Artist[]
+  sets    CardSet[]
 
-  Company Company[]
-  Group   Group[]
-  Artist  Artist[]
   @@map("images")
 }
+
+// Packs
+// model CompanyPack {
+//   id      Int @id @default(autoincrement())
+//   ownerId
+// }
 
 //TODO: model that allows users to vote on rarity delegation

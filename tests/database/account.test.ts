@@ -1,6 +1,5 @@
-import { createAccount } from "../../src/services";
 import { mockDatabase } from "../singleton";
-
+import { createAccount } from "../../src/db";
 test("should create new account ", async () => {
   const date = new Date();
   const account = {
@@ -8,6 +7,7 @@ test("should create new account ", async () => {
     id: "91eaab5b-232d-4333-b748-299433b7fa1b",
     dateCreated: date,
     isVerified: false,
+    isAdmin: false,
   };
 
   mockDatabase.account.create.mockResolvedValue(account);
@@ -17,5 +17,6 @@ test("should create new account ", async () => {
     handle: "dog",
     dateCreated: date,
     isVerified: false,
+    isAdmin: false,
   });
 });

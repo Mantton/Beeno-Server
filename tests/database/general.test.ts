@@ -1,4 +1,4 @@
-import { createCompany, createEra, createGroup } from "../../src/services";
+import { createCompany, createEra, createGroup } from "../../src/db";
 import { mockDatabase } from "../singleton";
 
 describe("General Services Tests", () => {
@@ -18,7 +18,7 @@ describe("General Services Tests", () => {
 
   test("should create group", async () => {
     const group = {
-      id: "91eaab5b-232d-4333-b748-299433b7fa1b",
+      id: 1,
       name: "TWICE",
       imageId: null,
       companyId: 2,
