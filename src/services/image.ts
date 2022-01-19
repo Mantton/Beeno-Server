@@ -1,7 +1,7 @@
 import { database } from "../helpers";
-import * as admin from "firebase-admin";
 import { v4 as uuidv4 } from "uuid";
 import { BUCKET_NAME } from "../utils";
+import { storage } from "../helpers";
 /**
  * Saves an Image address to the database
  * @param url The URL of the image
@@ -24,8 +24,7 @@ export const uploadImage = (file: Express.Multer.File) =>
   new Promise<string>((resolve, reject) => {
     const { buffer } = file;
 
-    const storage = admin.storage();
-    const bucket = storage.bucket(BUCKET_NAME);
+    const bucket = storage.bucket(BUCKET_NAME!);
 
     // * file type is validated to be an image atp
     const fileName = `${uuidv4()}.png`;

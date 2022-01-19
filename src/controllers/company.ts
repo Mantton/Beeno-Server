@@ -6,7 +6,7 @@ export const postCompany = async (
   res: Response,
   next: NextFunction
 ) => {
-  if (!req.account) {
+  if (!req.session.account) {
     res.status(401).send({ msg: "unauthorized", success: false });
   }
   const { name, imageId } = req.body;

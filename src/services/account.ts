@@ -1,17 +1,14 @@
 import { privileges } from "../config/constants";
 import { database } from "../helpers/prisma";
 import { ADMIN_EMAIL, ADMIN_HANDLE, ADMIN_PW } from "../utils";
-import { authenticateFirebaseUser, createFirebaseUser } from "./user";
 import { logger } from "../utils";
-// Handles Direct Adding of Data
-export const insertAccountRecord = async (
-  firebaseId: string,
-  handle: string
-) => {
+import { createCredentialRecord } from "./credential";
+
+export const insertAccountRecord = async (handle: string, email: string) => {
   return await database.account.create({
     data: {
-      firebaseId,
       handle,
+      email,
     },
   });
 };
@@ -28,9 +25,14 @@ export const createBeenoUser = async (
   password: string,
   handle: string
 ) => {
-  const record = await createFirebaseUser(email, password);
-  const account = await insertAccountRecord(record.uid, handle);
-  return account;
+  return await database.$transaction(async () => {
+    // Create Account Record
+    const account = await insertAccountRecord(handle, email);
+
+    // Create Credential Record
+    await createCredentialRecord(account.id, password);
+    return account;
+  });
 };
 
 /**
@@ -50,7 +52,8 @@ export const createSuperUser = async () => {
   account = await database.account.update({
     where: { id: account.id },
     data: {
-      verified: true,
+      emailVerified: true,
+      phoneVerified: true,
     },
   });
 
@@ -62,16 +65,4 @@ export const createSuperUser = async () => {
     },
   });
   logger.info(`SuperUser Created -- @${account.handle} -- ${account.id}`);
-};
-
-export const authenticateBeenoUser = async (jwt: string) => {
-  const uid = await authenticateFirebaseUser(jwt);
-  const account = await database.account.findUnique({
-    where: {
-      firebaseId: uid,
-    },
-  });
-
-  if (!account) throw "user not found";
-  return account;
 };

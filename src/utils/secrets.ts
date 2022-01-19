@@ -11,10 +11,10 @@ export const ADMIN_EMAIL = process.env["ADMIN_EMAIL"];
 export const ADMIN_HANDLE = process.env["ADMIN_HANDLE"];
 export const ADMIN_PW = process.env["ADMIN_PW"];
 
-// Firebase
-export const FIREBASE_PROJECT_ID = process.env["FIREBASE_PROJECT_ID"];
-export const FIREBASE_CLIENT_EMAIL = process.env["FIREBASE_CLIENT_EMAIL"];
-export const FIREBASE_PRIVATE_KEY = process.env["FIREBASE_PRIVATE_KEY"];
+// GCS
+export const GCS_PROJECT_ID = process.env["GCS_PROJECT_ID"];
+export const GCS_CLIENT_EMAIL = process.env["GCS_CLIENT_EMAIL"];
+export const GCS_PRIVATE_KEY = process.env["GCS_PRIVATE_KEY"];
 export const BUCKET_NAME = process.env["GCS_BUCKET"];
 //Misc
 export const SESSION_SECRET = process.env["SESSION_SECRET"];
@@ -36,9 +36,9 @@ if (!REDIS_HOST) {
   process.exit(1);
 }
 
-if (!FIREBASE_PROJECT_ID || !FIREBASE_CLIENT_EMAIL || !FIREBASE_PRIVATE_KEY) {
+if (!GCS_PROJECT_ID || !GCS_CLIENT_EMAIL || !GCS_PRIVATE_KEY || !BUCKET_NAME) {
   logger.error(
-    "Missing Firebase Config.Set FIREBASE_PROJECT_ID & FIREBASE_CLIENT_EMAIL & FIREBASE_PRIVATE_KEY"
+    "Missing GCS Config. Set GCS_PROJECT_ID & GCS_CLIENT_EMAIL & GCS_PRIVATE_KEY & BUCKET_NAME"
   );
   process.exit(1);
 }

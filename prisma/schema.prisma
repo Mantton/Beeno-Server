@@ -12,10 +12,11 @@ generator client {
 // Core Models
 model Account {
   id              Int          @id @default(autoincrement())
-  firebaseId      String       @unique // Firebase user UID
   handle          String       @unique @db.VarChar(18)
   dateCreated     DateTime     @default(now())
-  verified        Boolean      @default(false)
+  email           String       @unique
+  emailVerified   Boolean      @default(false)
+  phoneVerified   Boolean      @default(false)
   // Relations
   cards           Card[]
   initiatedTrades TradeOffer[] @relation("initiator")
@@ -24,7 +25,14 @@ model Account {
 
   privileges     Privilege[]
   uploadedImages Image[]
+  credentials    Credential[]
   @@map("accounts")
+}
+
+model Credential {
+  accountId   Int     @unique
+  hashedValue String
+  account     Account @relation(fields: [accountId], references: [id])
 }
 
 model Privilege {

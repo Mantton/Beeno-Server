@@ -1,12 +1,19 @@
 -- CreateTable
 CREATE TABLE "accounts" (
     "id" SERIAL NOT NULL,
-    "firebaseId" TEXT NOT NULL,
     "handle" VARCHAR(18) NOT NULL,
     "dateCreated" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "verified" BOOLEAN NOT NULL DEFAULT false,
+    "email" TEXT NOT NULL,
+    "emailVerified" BOOLEAN NOT NULL DEFAULT false,
+    "phoneVerified" BOOLEAN NOT NULL DEFAULT false,
 
     CONSTRAINT "accounts_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "Credential" (
+    "accountId" INTEGER NOT NULL,
+    "hashedValue" TEXT NOT NULL
 );
 
 -- CreateTable
@@ -130,10 +137,13 @@ CREATE TABLE "images" (
 );
 
 -- CreateIndex
-CREATE UNIQUE INDEX "accounts_firebaseId_key" ON "accounts"("firebaseId");
+CREATE UNIQUE INDEX "accounts_handle_key" ON "accounts"("handle");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "accounts_handle_key" ON "accounts"("handle");
+CREATE UNIQUE INDEX "accounts_email_key" ON "accounts"("email");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Credential_accountId_key" ON "Credential"("accountId");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "privileges_accountId_privilege_key" ON "privileges"("accountId", "privilege");
@@ -176,6 +186,9 @@ CREATE UNIQUE INDEX "trade_pieces_cardId_tradeOfferId_accountId_key" ON "trade_p
 
 -- CreateIndex
 CREATE UNIQUE INDEX "images_id_key" ON "images"("id");
+
+-- AddForeignKey
+ALTER TABLE "Credential" ADD CONSTRAINT "Credential_accountId_fkey" FOREIGN KEY ("accountId") REFERENCES "accounts"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "privileges" ADD CONSTRAINT "privileges_accountId_fkey" FOREIGN KEY ("accountId") REFERENCES "accounts"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

@@ -6,6 +6,7 @@ import { logger } from "../utils";
 const redisClient = (() => {
   const client = createClient({
     url: REDIS_HOST,
+    legacyMode: true,
   });
 
   return client;
