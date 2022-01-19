@@ -1,7 +1,20 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
+import { insertCompanyRecord } from "../services";
 
-export const postCompany = async (req: Request, res: Response) => {
-  const { name } = req.body;
+export const postCompany = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  if (!req.account) {
+    res.status(401).send({ msg: "unauthorized", success: false });
+  }
+  const { name, imageId } = req.body;
 
-  res.send({ success: true });
+  try {
+    const data = await insertCompanyRecord(name, imageId);
+    res.send({ data, success: true });
+  } catch (err) {
+    next(err);
+  }
 };

@@ -1,4 +1,4 @@
-import { database } from "../../helpers";
+import { database } from "../helpers";
 
 export const insertEraRecord = async (
   title: string,

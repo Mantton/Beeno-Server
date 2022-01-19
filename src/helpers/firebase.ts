@@ -4,8 +4,8 @@ import {
   FIREBASE_PRIVATE_KEY,
   FIREBASE_PROJECT_ID,
 } from "../utils";
-import logger from "../utils/logger";
 
+import { logger } from "../utils";
 export const initializeFirebaseAdmin = () => {
   admin.initializeApp({
     credential: admin.credential.cert({

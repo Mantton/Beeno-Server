@@ -1,12 +1,15 @@
-import { database } from "../../helpers";
+import { database } from "../helpers";
 
 /**
  * Creates a New Company
  * @param name Name of Company
  * @returns Promise of a Company Object
  */
-export const insertCompanyRecord = async (name: string) => {
-  const company = await database.company.create({ data: { name } });
+export const insertCompanyRecord = async (
+  name: string,
+  imageId: number | undefined
+) => {
+  const company = await database.company.create({ data: { name, imageId } });
   return company;
 };
 

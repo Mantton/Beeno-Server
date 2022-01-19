@@ -16,11 +16,9 @@ const alignColorsAndTime = winston.format.combine(
     )
   )
 );
-const logger = winston.createLogger({
+export const logger = winston.createLogger({
   level: "debug",
   format: winston.format.combine(alignColorsAndTime),
   transports: [new winston.transports.Console()],
   exitOnError: false,
 });
-
-export default logger;

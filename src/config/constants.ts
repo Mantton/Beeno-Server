@@ -8,5 +8,5 @@ export enum privileges {
   CRUD_ARTIST = 4,
   CRUD_CARD_SET = 5,
   CRUD_CARDS = 6,
-  CRUD_IMAGE = 7,
+  UPLOAD_IMAGE = 7,
 }

@@ -1,10 +1,9 @@
 import "dotenv/config";
-import logger from "./logger";
-
+import { logger } from ".";
 export const ENVIRONMENT = process.env.NODE_ENV ?? "development";
 export const isProductionEnvironment = ENVIRONMENT === "production";
 
-// Databse
+// Database
 export const DB_URI = process.env["DB_URI"];
 
 // Beeno SuperUser
@@ -16,7 +15,7 @@ export const ADMIN_PW = process.env["ADMIN_PW"];
 export const FIREBASE_PROJECT_ID = process.env["FIREBASE_PROJECT_ID"];
 export const FIREBASE_CLIENT_EMAIL = process.env["FIREBASE_CLIENT_EMAIL"];
 export const FIREBASE_PRIVATE_KEY = process.env["FIREBASE_PRIVATE_KEY"];
-
+export const BUCKET_NAME = process.env["GCS_BUCKET"];
 //Misc
 export const SESSION_SECRET = process.env["SESSION_SECRET"];
 export const REDIS_HOST = process.env["REDIS_HOST"];

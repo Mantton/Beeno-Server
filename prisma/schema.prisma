@@ -22,7 +22,8 @@ model Account {
   receivedTrades  TradeOffer[] @relation("recipient")
   tradePieces     TradePiece[]
 
-  privileges Privilege[]
+  privileges     Privilege[]
+  uploadedImages Image[]
   @@map("accounts")
 }
 
@@ -192,12 +193,15 @@ model TradePiece {
 }
 
 model Image {
-  id      Int       @id @unique @default(autoincrement())
-  base    String
-  company Company[]
-  groups  Group[]
-  artists Artist[]
-  sets    CardSet[]
+  id         Int    @id @unique @default(autoincrement())
+  base       String
+  uploaderId Int
+
+  uploader Account   @relation(fields: [uploaderId], references: [id])
+  company  Company[]
+  groups   Group[]
+  artists  Artist[]
+  sets     CardSet[]
 
   @@map("images")
 }

@@ -1,5 +1,5 @@
-import { privileges } from "../../config/constants";
-import { database } from "../../helpers";
+import { privileges } from "../config/constants";
+import { database } from "../helpers";
 
 export const getAccountPrivileges = async (id: number) => {
   const leges = await database.privilege.findMany({
@@ -63,8 +63,8 @@ export const hasNecessaryPrivileges = async (
   privilege: number,
   accountId: number
 ) => {
-  const leges = await getAccountPrivileges(accountId);
+  const accountPrivileges = await getAccountPrivileges(accountId);
   const hasPrivilege = (element: number) =>
     [privileges.SUPERUSER, privilege].includes(element);
-  return leges.some(hasPrivilege);
+  return accountPrivileges.some(hasPrivilege);
 };

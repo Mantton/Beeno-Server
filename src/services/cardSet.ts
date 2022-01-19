@@ -1,4 +1,4 @@
-import { database } from "../../helpers";
+import { database } from "../helpers";
 
 export const insertCardSetRecord = async (
   title: string,

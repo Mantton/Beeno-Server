@@ -1,4 +1,4 @@
-import { database } from "../../helpers";
+import { database } from "../helpers";
 export const insertGroupRecord = async (name: string, companyId: number) => {
   return await database.group.create({ data: { name, companyId } });
 };

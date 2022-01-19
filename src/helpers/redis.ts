@@ -1,7 +1,7 @@
 import { REDIS_HOST } from "../utils";
 
 import { createClient } from "redis";
-import logger from "../utils/logger";
+import { logger } from "../utils";
 
 const redisClient = (() => {
   const client = createClient({

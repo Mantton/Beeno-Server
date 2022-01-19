@@ -1,9 +1,8 @@
-import { privileges } from "../../config/constants";
-import { database } from "../../helpers/prisma";
-import { ADMIN_EMAIL, ADMIN_HANDLE, ADMIN_PW } from "../../utils";
-import logger from "../../utils/logger";
+import { privileges } from "../config/constants";
+import { database } from "../helpers/prisma";
+import { ADMIN_EMAIL, ADMIN_HANDLE, ADMIN_PW } from "../utils";
 import { authenticateFirebaseUser, createFirebaseUser } from "./user";
-
+import { logger } from "../utils";
 // Handles Direct Adding of Data
 export const insertAccountRecord = async (
   firebaseId: string,

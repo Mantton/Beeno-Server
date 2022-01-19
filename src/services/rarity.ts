@@ -1,5 +1,5 @@
-import { database } from "../../helpers";
-import logger from "../../utils/logger";
+import { database } from "../helpers";
+import { logger } from "../utils";
 /**
  * Creates A new Rarity
  * @param label The Name of the Rarity
