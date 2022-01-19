@@ -1,4 +1,4 @@
-import { fileTypeFromFile } from "file-type";
+import { fromFile } from "file-type";
 
 export const isValidImage = async (file: Express.Multer.File) => {
   // reference : https://stackoverflow.com/a/68283248
@@ -6,7 +6,7 @@ export const isValidImage = async (file: Express.Multer.File) => {
 
   if (!whitelist.includes(file.mimetype)) return false;
 
-  const meta = await fileTypeFromFile(file.path);
+  const meta = await fromFile(file.path);
 
   if (!meta) return false;
   if (!whitelist.includes(meta.mime)) return false;

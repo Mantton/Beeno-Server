@@ -7,5 +7,5 @@
         "src/**/*.spec.ts",
         "src/local/*.ts"
     ],
-    "exec": "ts-node ./src/server.ts --files"
+    "exec": "ts-node --files ./src/server.ts"
 }
