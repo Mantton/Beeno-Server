@@ -3,4 +3,8 @@ import * as Controller from "../controllers/company";
 
 export const companyRouter = Router();
 
-companyRouter.post("/", Controller.postCompany);
+companyRouter.post("/", Controller.handleCreateCompany);
+
+// Create Company
+// Edit Company
+// Delete Company

@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import { createImage } from "../services";
 import { isValidImage } from "../validations/imageUpload";
 
-export const uploadImage = async (
+export const handleUploadImage = async (
   req: Request,
   res: Response,
   next: NextFunction

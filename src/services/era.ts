@@ -3,9 +3,12 @@ import { database } from "../helpers";
 export const insertEraRecord = async (
   title: string,
   groupId: number,
+  artistId: number,
   startDate: Date | null = null
 ) => {
-  return await database.era.create({ data: { title, groupId, startDate } });
+  return await database.era.create({
+    data: { title, groupId, artistId, startDate },
+  });
 };
 
 export const getEraRecord = async (id: number) => {

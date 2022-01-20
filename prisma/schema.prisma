@@ -33,6 +33,8 @@ model Credential {
   accountId   Int     @unique
   hashedValue String
   account     Account @relation(fields: [accountId], references: [id])
+
+  @@map("credentials")
 }
 
 model Privilege {
@@ -95,11 +97,9 @@ model Era {
   groupId   Int?
   artistId  Int?
 
-
-
-  group  Group?    @relation(fields: [groupId], references: [id])
-  artist Artist?   @relation(fields: [artistId], references: [id])
-  sets   CardSet[]
+  group       Group?       @relation(fields: [groupId], references: [id])
+  artist      Artist?      @relation(fields: [artistId], references: [id])
+  collections Collection[]
   @@unique([title, groupId])
   @@map("eras")
 }
@@ -121,21 +121,34 @@ model Card {
   @@map("cards")
 }
 
+model Collection {
+  id    Int    @id @default(autoincrement())
+  title String @db.VarChar(50)
+  eraId Int
+
+
+  era  Era       @relation(fields: [eraId], references: [id])
+  sets CardSet[]
+
+
+  @@map("collections")
+}
+
 model CardSet {
   id     Int      @id @default(autoincrement())
-  title  String   @db.VarChar(25)
+  title  String   @db.VarChar(50)
   minted DateTime @default(now())
 
-  eraId    Int
-  rarityId Int
-  imageId  Int
+  rarityId     Int
+  imageId      Int
+  collectionId Int
 
   artists CardSetArtist[]
   cards   Card[]
-  era     Era             @relation(fields: [eraId], references: [id])
   rarity  Rarity          @relation(fields: [rarityId], references: [id])
   image   Image           @relation(fields: [imageId], references: [id])
 
+  collection Collection @relation(fields: [collectionId], references: [id])
   @@map("cardsets")
 }
 

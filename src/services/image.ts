@@ -24,6 +24,7 @@ export const uploadImage = (file: Express.Multer.File) =>
   new Promise<string>((resolve, reject) => {
     const { buffer } = file;
 
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const bucket = storage.bucket(BUCKET_NAME!);
 
     // * file type is validated to be an image atp

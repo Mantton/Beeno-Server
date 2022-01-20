@@ -13,6 +13,24 @@ export const insertCompanyRecord = async (
   return company;
 };
 
+export const editCompanyRecord = async (
+  id: number,
+  name: string,
+  imageId: number
+) => {
+  const updated = await database.company.update({
+    where: {
+      id,
+    },
+    data: {
+      name,
+      imageId,
+    },
+  });
+
+  return updated;
+};
+
 export const getCompanyRecord = async (id: number) => {
   return await database.company.findUnique({
     where: { id },

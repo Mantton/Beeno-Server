@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
-import { insertCompanyRecord } from "../services";
+import { editCompanyRecord, insertCompanyRecord } from "../services";
 
-export const postCompany = async (
+export const handleCreateCompany = async (
   req: Request,
   res: Response,
   next: NextFunction
@@ -18,3 +18,21 @@ export const postCompany = async (
     next(err);
   }
 };
+
+export async function handleEditCompany(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  const { id, name, imageId } = req.body;
+
+  try {
+    const company = await editCompanyRecord(id, name, imageId);
+    res.send({
+      data: company,
+      success: true,
+    });
+  } catch (err) {
+    next(err);
+  }
+}

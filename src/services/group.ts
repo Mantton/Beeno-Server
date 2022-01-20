@@ -1,6 +1,10 @@
 import { database } from "../helpers";
-export const insertGroupRecord = async (name: string, companyId: number) => {
-  return await database.group.create({ data: { name, companyId } });
+export const insertGroupRecord = async (
+  name: string,
+  companyId: number,
+  imageId: number | undefined = undefined
+) => {
+  return await database.group.create({ data: { name, companyId, imageId } });
 };
 
 export const getGroupRecord = async (id: number) => {
