@@ -39,3 +39,16 @@ export async function seedRarities() {
   await Promise.all(promises);
   logger.info("Updated Rarities");
 }
+
+/**
+ * fetches a rarity record
+ * @param id id of rarity
+ * @returns the rarity record or null
+ */
+export async function fetchRarityRecord(id: number) {
+  return await database.rarity.findUnique({
+    where: {
+      id,
+    },
+  });
+}

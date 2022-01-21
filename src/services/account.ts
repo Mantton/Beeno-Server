@@ -1,3 +1,4 @@
+import { report } from "process";
 import { privileges } from "../config/constants";
 import { database } from "../helpers/prisma";
 import { ADMIN_EMAIL, ADMIN_HANDLE, ADMIN_PW } from "../utils";
@@ -65,4 +66,36 @@ export const createSuperUser = async () => {
     },
   });
   logger.info(`SuperUser Created -- @${account.handle} -- ${account.id}`);
+};
+
+/**
+ * Checks if an account exists in the db using an entry string
+ * @param entry The email or handle of the target account
+ * @returns Boolean indicating whether the account exists or not
+ */
+export const doesAccountExist = async (entry: string) => {
+  const emailRegex =
+    /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+  if (entry.match(emailRegex)) {
+    // Handle Email Flow
+
+    const accounts = await database.account.count({
+      where: {
+        email: entry,
+      },
+    });
+
+    if (accounts == 0) return false;
+  } else {
+    const accounts = await database.account.count({
+      where: {
+        handle: entry,
+      },
+    });
+
+    if (accounts == 0) return false;
+  }
+
+  return true;
 };

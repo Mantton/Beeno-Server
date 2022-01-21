@@ -42,3 +42,7 @@ export const handlePingPong = (req: Request, res: Response) => {
     res.status(401).send({ msg: "unauthorized" });
   }
 };
+
+const handleAccountLookUp = async () => {
+  //
+};
