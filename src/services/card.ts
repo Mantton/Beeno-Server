@@ -1,6 +1,6 @@
 import { database } from "../helpers";
 
-export const generateAndInsertCards = async (
+export const insertCardsForCardSet = async (
   setId: number,
   iterations: number
 ) => {

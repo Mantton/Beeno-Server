@@ -14,7 +14,7 @@ export async function handleCreateCollection(
   res: Response,
   next: NextFunction
 ) {
-  // ! Note, data should be validated before this point
+  // ! TODO, data should be validated before this point
   const { title, collectionId, rarityId, imageId, artistIds } = req.body;
   try {
     const set = await insertCardSetRecord(

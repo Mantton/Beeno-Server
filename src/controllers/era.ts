@@ -1,12 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { insertEraRecord } from "../services";
 
-export const postEra = async (req: Request, res: Response) => {
-  const { title, groupId } = req.body;
-
-  res.send({ success: true });
-};
-
 export async function handleCreateEra(
   req: Request,
   res: Response,

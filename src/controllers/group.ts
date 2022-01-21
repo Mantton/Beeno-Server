@@ -1,12 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { insertGroupRecord } from "../services";
 
-export const postGroup = async (req: Request, res: Response) => {
-  const { name, companyId } = req.body;
-
-  res.send({ success: true });
-};
-
 // Create Group
 
 export async function handleCreateGroup(

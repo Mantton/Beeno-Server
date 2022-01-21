@@ -1,15 +1,18 @@
 import express from "express";
 import helmet from "helmet";
 import multer from "multer";
+import cors from "cors";
+import compression from "compression";
+import connectRedis from "connect-redis";
+import session from "express-session";
 import { errorHandler } from "./helpers";
 import { companyRouter } from "./routes";
 import { imageRouter } from "./routes/image";
 import { createSuperUser } from "./services/";
 import { logger } from "./utils";
-import connectRedis from "connect-redis";
-import session from "express-session";
 import redisClient from "./helpers/redis";
 import { authRouter } from "./routes/auth";
+import { morganLogger } from "./utils/morgan";
 
 const app = express();
 redisClient.connect();
@@ -44,6 +47,9 @@ app.use(sessionStore);
 app.use(multerMid.single("file"));
 app.use(helmet());
 app.use(express.json());
+app.use(cors());
+app.use(morganLogger);
+app.use(compression());
 
 // SuperUser
 createSuperUser().catch((err) => {

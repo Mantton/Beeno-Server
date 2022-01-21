@@ -72,6 +72,7 @@ export const handleHandleLookUp = async (
   next: NextFunction
 ) => {
   const handle = req.body.handle;
+  // * Note, the beeno frontend removes the '@' character if added by user
   try {
     const inUse = await isHandleInUse(handle);
     res.send({ inUse });
