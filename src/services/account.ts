@@ -1,4 +1,3 @@
-import { report } from "process";
 import { privileges } from "../config/constants";
 import { database } from "../helpers/prisma";
 import { ADMIN_EMAIL, ADMIN_HANDLE, ADMIN_PW } from "../utils";
@@ -71,7 +70,7 @@ export const createSuperUser = async () => {
 /**
  * Checks if an account exists in the db using an entry string
  * @param entry The email or handle of the target account
- * @returns Boolean indicating whether the account exists or not
+ * @returns A string indicating the method the account was located with or undefined
  */
 export const doesAccountExist = async (entry: string) => {
   const emailRegex =
@@ -86,7 +85,7 @@ export const doesAccountExist = async (entry: string) => {
       },
     });
 
-    if (accounts == 0) return false;
+    if (accounts != 0) return "email";
   } else {
     const accounts = await database.account.count({
       where: {
@@ -94,8 +93,23 @@ export const doesAccountExist = async (entry: string) => {
       },
     });
 
-    if (accounts == 0) return false;
+    if (accounts != 0) return "handle";
   }
+};
+
+/**
+ * Checks if a handle is currently in use
+ * @param handle The queried handle
+ * @returns A boolean indicating whether a handle is in use
+ */
+export const isHandleInUse = async (handle: string) => {
+  const accounts = await database.account.count({
+    where: {
+      handle,
+    },
+  });
+
+  if (accounts == 0) return false;
 
   return true;
 };

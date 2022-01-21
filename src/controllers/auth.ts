@@ -1,5 +1,7 @@
 import { NextFunction, Request, Response } from "express";
+import { doesAccountExist, isHandleInUse } from "../services";
 import { loginUser } from "../services/authentication";
+import { logger } from "../utils";
 
 export const handleLogin = async (
   req: Request,
@@ -35,14 +37,55 @@ export const handleLogin = async (
   }
 };
 
-export const handlePingPong = (req: Request, res: Response) => {
+export const handleGetAuthenticatedUser = (req: Request, res: Response) => {
   if (req.session.account) {
-    res.send({ msg: "Pong", handle: req.session.account.handle });
+    res.send({ msg: "Beeno", handle: req.session.account.handle });
   } else {
     res.status(401).send({ msg: "unauthorized" });
   }
 };
 
-const handleAccountLookUp = async () => {
-  //
+export const handleAccountLookUp = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  // Data is validated before this point
+  const entry = req.body.text;
+  try {
+    const foundType = await doesAccountExist(entry);
+
+    if (!foundType) {
+      res.status(404).send({ msg: "account not found" });
+      return;
+    }
+
+    res.send({ success: true, type: foundType });
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const handleHandleLookUp = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const handle = req.body.handle;
+  try {
+    const inUse = await isHandleInUse(handle);
+    res.send({ inUse });
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const handleLogout = (req: Request, res: Response) => {
+  req.session.destroy((err) => {
+    if (err) {
+      logger.error(err.message);
+    }
+
+    res.send({ msg: "Beeno" });
+  });
 };

@@ -6,8 +6,14 @@ export const authRouter = Router();
 
 authRouter.post("/login", validateLoginRequest, Controller.handleLogin);
 
-authRouter.get("/me", requiresAuthentication, Controller.handlePingPong);
+authRouter.get(
+  "/me",
+  requiresAuthentication,
+  Controller.handleGetAuthenticatedUser
+);
 
+authRouter.post("/flow/exists", Controller.handleAccountLookUp);
+authRouter.post("/flow/handle", Controller.handleHandleLookUp);
 // Email Verification
 // Phone Verification
 // Logout
