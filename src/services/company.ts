@@ -31,6 +31,27 @@ export const editCompanyRecord = async (
   return updated;
 };
 
+export const getCompanyRecords = async (page: number, sort: number) => {
+  // TODO: Sorting
+  const take = 30;
+  const skip = take * (page - 1);
+  const companies = await database.company.findMany({
+    skip,
+    take: 30,
+    select: {
+      id: true,
+      name: true,
+      image: {
+        select: {
+          base: true,
+        },
+      },
+    },
+  });
+
+  return { companies, lastPage: companies.length < take };
+};
+
 export const getCompanyRecord = async (id: number) => {
   return await database.company.findUnique({
     where: { id },

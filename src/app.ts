@@ -1,7 +1,7 @@
 import express from "express";
 import helmet from "helmet";
 import multer from "multer";
-import cors from "cors";
+import cors, { CorsOptions } from "cors";
 import compression from "compression";
 import connectRedis from "connect-redis";
 import session from "express-session";
@@ -15,6 +15,7 @@ import { authRouter } from "./routes/auth";
 import { morganLogger } from "./utils/morgan";
 
 const app = express();
+// app.options("*", cors({origin: []}));
 redisClient.connect();
 // Multer
 const multerMid = multer({
@@ -41,15 +42,23 @@ const sessionStore = session({
     sameSite: true,
   },
 });
+
 app.use(sessionStore);
 
 // Middleware
 app.use(multerMid.single("file"));
 app.use(helmet());
 app.use(express.json());
-app.use(cors());
 app.use(morganLogger);
 app.use(compression());
+
+// CORS
+const whitelist = ["http://localhost:3000"];
+const options: CorsOptions = {
+  origin: whitelist,
+  credentials: true,
+};
+app.use(cors(options));
 
 // SuperUser
 createSuperUser().catch((err) => {

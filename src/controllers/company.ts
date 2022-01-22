@@ -1,5 +1,9 @@
 import { NextFunction, Request, Response } from "express";
-import { editCompanyRecord, insertCompanyRecord } from "../services";
+import {
+  editCompanyRecord,
+  getCompanyRecords,
+  insertCompanyRecord,
+} from "../services";
 
 export const handleCreateCompany = async (
   req: Request,
@@ -8,6 +12,7 @@ export const handleCreateCompany = async (
 ) => {
   if (!req.session.account) {
     res.status(401).send({ msg: "unauthorized", success: false });
+    return;
   }
   const { name, imageId } = req.body;
 
@@ -32,6 +37,29 @@ export async function handleEditCompany(
       data: company,
       success: true,
     });
+  } catch (err) {
+    next(err);
+  }
+}
+export async function handleGetCompanyRecords(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  try {
+    const { page, sort } = req.query;
+
+    if (typeof page === "string" && typeof sort === "string") {
+      const data = await getCompanyRecords(
+        parseInt(page) ?? 1,
+        parseInt(sort) ?? 0
+      );
+
+      res.send(data);
+      return;
+    }
+
+    res.status(400).send({ msg: "bad request" });
   } catch (err) {
     next(err);
   }
