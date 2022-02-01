@@ -53,7 +53,7 @@ export const loginUser = async (
     },
   });
 
-  if (!account) throw "Unexpected Failure";
+  if (!account) throw new Error("ERR_UNEXPECTED_RESULT");
 
   return account;
 };

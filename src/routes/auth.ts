@@ -6,8 +6,8 @@ import {
   validateHandleFlow,
   validateLoginRequest,
 } from "../validations/auth";
-export const authRouter = Router();
 
+export const authRouter = Router();
 authRouter.post("/login", validateLoginRequest, Controller.handleLogin);
 
 authRouter.get(

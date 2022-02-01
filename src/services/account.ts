@@ -109,7 +109,7 @@ export const isHandleInUse = async (handle: string) => {
     },
   });
 
-  if (accounts > 1) throw "ERR_VALIDATION_FAILED"; // never
+  if (accounts > 1) throw new Error("ERR_VALIDATION_FAILED"); // never
   if (accounts == 0) return false;
 
   return true;

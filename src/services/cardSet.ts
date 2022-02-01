@@ -20,7 +20,7 @@ export const insertCardSetRecord = async (
   imageId: number,
   artistIds: number[]
 ) => {
-  if (artistIds.length == 0) throw "ERR_NO_ARTISTS_PROVIDED"; // should never happen as data is validated before here
+  if (artistIds.length == 0) throw new Error("ERR_NO_ARTISTS_PROVIDED"); // should never happen as data is validated before here
 
   // DB Transaction
   const set = await database.$transaction(async (repo) => {
