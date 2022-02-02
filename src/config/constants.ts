@@ -2,11 +2,8 @@ export const APP_NAME = "Beeno";
 
 export enum privileges {
   SUPERUSER = 0,
-  CRUD_COMPANY = 1,
-  CRUD_GROUPS = 2,
-  CRUD_ERA = 3,
-  CRUD_ARTIST = 4,
-  CRUD_CARD_SET = 5,
-  CRUD_CARDS = 6,
-  UPLOAD_IMAGE = 7,
+  CRUD_CAG = 1, // CAG: Company, Artist, Groups
+  CRUD_ES = 2, // ES: Eras , Sets (Card Sets)
+  CRUD_CARDS = 3,
+  UPLOAD_IMAGE = 4,
 }

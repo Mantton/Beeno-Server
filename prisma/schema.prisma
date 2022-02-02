@@ -59,35 +59,43 @@ model Company {
 }
 
 model Group {
-  id        Int      @id @default(autoincrement())
-  name      String   @unique @db.VarChar(30)
+  id        Int     @id @default(autoincrement())
+  name      String  @unique @db.VarChar(30)
   companyId Int
-  members   Artist[]
   eras      Era[]
-  company   Company  @relation(fields: [companyId], references: [id])
-  image     Image?   @relation(fields: [imageId], references: [id])
+  company   Company @relation(fields: [companyId], references: [id])
+  image     Image?  @relation(fields: [imageId], references: [id])
 
   imageId Int?
+  artists GroupArtist[]
   @@map("groups")
 }
 
 model Artist {
-  id        Int  @id @default(autoincrement())
-  groupId   Int?
+  id        Int @id @default(autoincrement())
   companyId Int
 
   name  String @db.VarChar(20)
   image Image? @relation(fields: [imageId], references: [id])
 
   // Relations
-  group   Group?  @relation(fields: [groupId], references: [id])
   company Company @relation(fields: [companyId], references: [id])
 
   references CardSetArtist[]
   imageId    Int?
   soloEras   Era[]
-  @@unique([name, groupId])
+  groups     GroupArtist[]
   @@map("artists")
+}
+
+model GroupArtist {
+  artistId Int
+  groupId  Int
+
+  group  Group  @relation(fields: [groupId], references: [id])
+  artist Artist @relation(fields: [artistId], references: [id])
+  @@id([artistId, groupId])
+  @@map("group_artists")
 }
 
 model Era {

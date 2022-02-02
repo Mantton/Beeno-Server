@@ -1,8 +1,5 @@
 import { Request, Response, NextFunction } from "express";
 import { insertArtistRecord } from "../services";
-export const getArtists = (req: Request, res: Response) => {
-  res.send({ msg: "artist" });
-};
 
 // Create Artist
 

@@ -1,18 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { hasNecessaryPrivileges } from "../services";
 
-export const requiresSession = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  if (!req.session || !req.sessionID) {
-    res.status(401).send({ msg: "unauthorized" });
-    return;
-  }
-  next();
-};
-
 export const requiresAuthentication = async (
   req: Request,
   res: Response,

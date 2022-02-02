@@ -58,7 +58,7 @@ export async function handlePublishCardSet(
 
     // Create Cards
     const rarity = await fetchRarityRecord(set.rarityId);
-    if (!rarity) throw "ERR_RARITY_DNE"; // Should never happen but to be safe
+    if (!rarity) throw new Error("ERR_RARITY_DNE"); // Should never happen but to be safe
     const iterations = getIterations(rarity.label);
 
     const cardsCreated = await insertCardsForCardSet(set.id, iterations);

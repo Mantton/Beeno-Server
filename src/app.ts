@@ -13,6 +13,7 @@ import { logger } from "./utils";
 import redisClient from "./helpers/redis";
 import { authRouter } from "./routes/auth";
 import { morganLogger } from "./utils/morgan";
+import { groupRouter } from "./routes/group";
 
 const app = express();
 // app.options("*", cors({origin: []}));
@@ -69,6 +70,7 @@ createSuperUser().catch((err) => {
 app.use("/company", companyRouter);
 app.use("/image", imageRouter);
 app.use("/auth", authRouter);
+app.use("/group", groupRouter);
 
 // Error Handler
 

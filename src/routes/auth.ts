@@ -2,14 +2,14 @@ import { Router } from "express";
 import * as Controller from "../controllers/auth";
 import { requiresAuthentication } from "../validations";
 import {
-  validateExists,
+  validateAccountExistsFlow,
   validateHandleFlow,
   validateLoginRequest,
 } from "../validations/auth";
 
 export const authRouter = Router();
-authRouter.post("/login", validateLoginRequest, Controller.handleLogin);
-
+authRouter.post("/login", validateLoginRequest(), Controller.handleLogin);
+authRouter.get("/logout", requiresAuthentication, Controller.handleLogout);
 authRouter.get(
   "/me",
   requiresAuthentication,
@@ -18,14 +18,15 @@ authRouter.get(
 
 authRouter.post(
   "/flow/exists",
-  [validateExists],
+  [validateAccountExistsFlow()],
   Controller.handleAccountLookUp
 );
 authRouter.post(
   "/flow/handle",
-  [validateHandleFlow],
+  [validateHandleFlow()],
   Controller.handleHandleLookUp
 );
+
+// TODO
 // Email Verification
 // Phone Verification
-// Logout

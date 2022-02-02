@@ -12,11 +12,17 @@ export const getGroupRecord = async (id: number) => {
     where: {
       id,
     },
+    include: {
+      image: true,
+    },
   });
 };
 
 export const getGroupRecordsForCompany = async (companyId: number) => {
   return await database.group.findMany({
     where: { companyId },
+    include: {
+      image: true,
+    },
   });
 };
