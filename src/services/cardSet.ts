@@ -1,15 +1,52 @@
 import { database } from "../helpers";
 
-export const fetchCardSetRecord = async (
-  id: number,
-  includeArtists = false
-) => {
+export const fetchCardSetRecord = async (id: number) => {
   return await database.cardSet.findUnique({
     where: {
       id,
     },
-    include: {
-      artists: includeArtists,
+    select: {
+      id: true,
+      title: true,
+      minted: true,
+      image: {
+        select: {
+          base: true,
+        },
+      },
+      rarity: true,
+      collection: {
+        select: {
+          id: true,
+          title: true,
+          era: {
+            select: {
+              id: true,
+              title: true,
+              image: {
+                select: {
+                  base: true,
+                },
+              },
+            },
+          },
+        },
+      },
+      artists: {
+        select: {
+          artist: {
+            select: {
+              name: true,
+              id: true,
+              image: {
+                select: {
+                  base: true,
+                },
+              },
+            },
+          },
+        },
+      },
     },
   });
 };

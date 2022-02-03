@@ -9,12 +9,11 @@ import {
 } from "../services";
 import { getIterations } from "../utils";
 
-export async function handleCreateCollection(
+export async function handleCreateCardSet(
   req: Request,
   res: Response,
   next: NextFunction
 ) {
-  // ! TODO, data should be validated before this point
   const { title, collectionId, rarityId, imageId, artistIds } = req.body;
   try {
     const set = await insertCardSetRecord(
@@ -34,6 +33,23 @@ export async function handleCreateCollection(
   }
 }
 
+export const handleGetCardSet = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const id = req.params.id;
+
+  if (!parseInt(id)) return res.status(400).send({ msg: "bad request" });
+  try {
+    const data = await fetchCardSetRecord(parseInt(id));
+
+    res.send({ data });
+  } catch (err) {
+    next(err);
+  }
+};
+
 export async function handlePublishCardSet(
   req: Request,
   res: Response,
@@ -49,21 +65,21 @@ export async function handlePublishCardSet(
       return;
     }
 
-    // Fetch Set with id
-    const set = await fetchCardSetRecord(setId);
-    if (!set) {
-      res.status(400).send({ msg: "bad request, card set not found" });
-      return;
-    }
+    // // Fetch Set with id
+    // const set = await fetchCardSetRecord(setId);
+    // if (!set) {
+    //   res.status(400).send({ msg: "bad request, card set not found" });
+    //   return;
+    // }
 
-    // Create Cards
-    const rarity = await fetchRarityRecord(set.rarityId);
-    if (!rarity) throw new Error("ERR_RARITY_DNE"); // Should never happen but to be safe
-    const iterations = getIterations(rarity.label);
+    // // Create Cards
+    // const rarity = await fetchRarityRecord(set.rarityId);
+    // if (!rarity) throw new Error("ERR_RARITY_DNE"); // Should never happen but to be safe
+    // const iterations = getIterations(rarity.label);
 
-    const cardsCreated = await insertCardsForCardSet(set.id, iterations);
+    // const cardsCreated = await insertCardsForCardSet(set.id, iterations);
 
-    res.send({ data: { set, count: cardsCreated } });
+    // res.send({ data: { set, count: cardsCreated } });
   } catch (err) {
     next(err);
   }

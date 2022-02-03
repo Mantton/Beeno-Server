@@ -26,6 +26,71 @@ export const getEraRecord = async (id: number) => {
     where: {
       id,
     },
+    select: {
+      id: true,
+      title: true,
+      image: {
+        select: {
+          base: true,
+        },
+      },
+      group: {
+        select: {
+          id: true,
+          name: true,
+          image: {
+            select: {
+              base: true,
+            },
+          },
+          members: {
+            select: {
+              artist: {
+                select: {
+                  name: true,
+                  id: true,
+                  image: {
+                    select: {
+                      base: true,
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+
+      collections: {
+        select: {
+          id: true,
+          title: true,
+          sets: {
+            select: {
+              id: true,
+              title: true,
+              minted: true,
+              artists: {
+                select: {
+                  artistId: true,
+                },
+              },
+              image: {
+                select: {
+                  base: true,
+                },
+              },
+              rarity: {
+                select: {
+                  label: true,
+                  hex: true,
+                },
+              },
+            },
+          },
+        },
+      },
+    },
   });
 };
 

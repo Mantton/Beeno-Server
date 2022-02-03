@@ -1,5 +1,9 @@
 import { Request, Response, NextFunction } from "express";
-import { getEraRecordsForGroup, insertEraRecordForGroup } from "../services";
+import {
+  getEraRecord,
+  getEraRecordsForGroup,
+  insertEraRecordForGroup,
+} from "../services";
 
 export async function handleCreateEraForGroup(
   req: Request,
@@ -36,3 +40,20 @@ export async function handleGetEraForGroup(
     next(err);
   }
 }
+
+export const handleGetEra = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const id = req.params.id;
+
+  try {
+    if (!parseInt) return res.status(400).send({ msg: "bad request" });
+
+    const data = await getEraRecord(parseInt(id));
+    res.send({ data });
+  } catch (err) {
+    next(err);
+  }
+};

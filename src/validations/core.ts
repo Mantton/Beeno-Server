@@ -36,3 +36,27 @@ export const validateEraForGroupRequest = () => {
 
   return validateRequest(schema);
 };
+
+// COLLECTION
+
+export const validateCollectionRequest = () => {
+  const schema = Joi.object({
+    eraId: Joi.number().required(),
+    title: Joi.string().required().max(40),
+  });
+  return validateRequest(schema);
+};
+
+// CARD SET
+
+export const validateCardSetRequest = () => {
+  const schema = Joi.object({
+    title: Joi.string().required().max(25),
+    collectionId: Joi.number().required(),
+    rarityId: Joi.number().required(),
+    imageId: Joi.number().required(),
+    artistIds: Joi.array().items(Joi.number().required()).required(),
+  });
+
+  return validateRequest(schema);
+};

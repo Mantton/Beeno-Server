@@ -6,9 +6,15 @@ import compression from "compression";
 import connectRedis from "connect-redis";
 import session from "express-session";
 import { errorHandler } from "./helpers";
-import { artistRouter, companyRouter, eraRouter } from "./routes";
+import {
+  artistRouter,
+  companyRouter,
+  eraRouter,
+  collectionRouter,
+  setRouter,
+} from "./routes";
 import { imageRouter } from "./routes/image";
-import { createSuperUser } from "./services/";
+import { createSuperUser, seedRarities } from "./services/";
 import { logger } from "./utils";
 import redisClient from "./helpers/redis";
 import { authRouter } from "./routes/auth";
@@ -66,6 +72,10 @@ createSuperUser().catch((err) => {
   logger.error("Failed to Create SuperUser " + err.message);
   process.exit(1);
 });
+
+seedRarities().catch((err) => {
+  logger.error("Failed to Seed " + err.message);
+});
 // Routes
 app.use("/company", companyRouter);
 app.use("/image", imageRouter);
@@ -73,12 +83,14 @@ app.use("/auth", authRouter);
 app.use("/group", groupRouter);
 app.use("/artist", artistRouter);
 app.use("/era", eraRouter);
-// Error Handler
+app.use("/collection", collectionRouter);
+app.use("/set", setRouter);
 
+// Error Handler
 app.use(errorHandler);
 
 app.use("*", (req: Request, res: Response) => {
-  res.status(404).send({ msg: "not found" });
+  res.status(400).send({ msg: "bad req" });
 });
 
 export default app;
