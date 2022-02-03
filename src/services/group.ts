@@ -4,7 +4,10 @@ export const insertGroupRecord = async (
   companyId: number,
   imageId: number | undefined = undefined
 ) => {
-  return await database.group.create({ data: { name, companyId, imageId } });
+  return await database.group.create({
+    data: { name, companyId, imageId },
+    include: { image: true },
+  });
 };
 
 export const getGroupRecord = async (id: number) => {
@@ -12,8 +15,43 @@ export const getGroupRecord = async (id: number) => {
     where: {
       id,
     },
-    include: {
-      image: true,
+
+    select: {
+      image: {
+        select: {
+          base: true,
+        },
+      },
+      id: true,
+      name: true,
+      companyId: true,
+      eras: {
+        select: {
+          title: true,
+          id: true,
+          image: {
+            select: {
+              base: true,
+            },
+          },
+        },
+      },
+      members: {
+        select: {
+          artist: {
+            select: {
+              id: true,
+              name: true,
+
+              image: {
+                select: {
+                  base: true,
+                },
+              },
+            },
+          },
+        },
+      },
     },
   });
 };

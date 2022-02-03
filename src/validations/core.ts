@@ -18,7 +18,20 @@ export const validateArtistRequest = () => {
     name: Joi.string().required().max(40),
     companyId: Joi.number().required(),
     imageId: Joi.number().required(),
-    groupId: Joi.number().allow(null),
+    groupIds: Joi.array(),
+  });
+
+  return validateRequest(schema);
+};
+
+// ERA - Group
+
+export const validateEraForGroupRequest = () => {
+  const schema = Joi.object({
+    title: Joi.string().required().max(40),
+    groupId: Joi.number().required(),
+    imageId: Joi.number().required(),
+    startDate: Joi.date().allow(null),
   });
 
   return validateRequest(schema);

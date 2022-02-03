@@ -28,6 +28,7 @@ export const updateArtistRecord = async (
   data: {
     imageId: number | undefined;
     name: string | undefined;
+    groupIds: number[];
   }
 ) => {
   // TODO: Group IDs Update
@@ -43,6 +44,42 @@ export const getArtistRecord = async (id: number) => {
   return await database.artist.findUnique({
     where: {
       id,
+    },
+
+    select: {
+      name: true,
+      id: true,
+      company: {
+        select: {
+          id: true,
+          name: true,
+          image: {
+            select: {
+              base: true,
+            },
+          },
+        },
+      },
+      groups: {
+        select: {
+          group: {
+            select: {
+              id: true,
+              name: true,
+              image: {
+                select: {
+                  base: true,
+                },
+              },
+            },
+          },
+        },
+      },
+      image: {
+        select: {
+          base: true,
+        },
+      },
     },
   });
 };

@@ -5,7 +5,7 @@ import { requiresPrivilege } from "../validations";
 import { validateArtistRequest } from "../validations/core";
 export const artistRouter = Router();
 
-artistRouter.get("/:id");
+artistRouter.get("/:id", Controller.handleGetArtist);
 
 artistRouter.post(
   "/new",

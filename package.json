@@ -1,5 +1,5 @@
 {
-  "name": "boono-server",
+  "name": "beeno-server",
   "version": "1.0.0",
   "description": "backend for Beeno",
   "main": "./dist/server.js",

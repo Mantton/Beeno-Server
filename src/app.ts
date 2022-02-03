@@ -1,4 +1,4 @@
-import express from "express";
+import express, { Request, Response } from "express";
 import helmet from "helmet";
 import multer from "multer";
 import cors, { CorsOptions } from "cors";
@@ -6,7 +6,7 @@ import compression from "compression";
 import connectRedis from "connect-redis";
 import session from "express-session";
 import { errorHandler } from "./helpers";
-import { companyRouter } from "./routes";
+import { artistRouter, companyRouter, eraRouter } from "./routes";
 import { imageRouter } from "./routes/image";
 import { createSuperUser } from "./services/";
 import { logger } from "./utils";
@@ -71,8 +71,14 @@ app.use("/company", companyRouter);
 app.use("/image", imageRouter);
 app.use("/auth", authRouter);
 app.use("/group", groupRouter);
-
+app.use("/artist", artistRouter);
+app.use("/era", eraRouter);
 // Error Handler
 
 app.use(errorHandler);
+
+app.use("*", (req: Request, res: Response) => {
+  res.status(404).send({ msg: "not found" });
+});
+
 export default app;

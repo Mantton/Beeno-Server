@@ -1,5 +1,9 @@
 import { NextFunction, Request, Response } from "express";
-import { getGroupRecordsForCompany, insertGroupRecord } from "../services";
+import {
+  getGroupRecord,
+  getGroupRecordsForCompany,
+  insertGroupRecord,
+} from "../services";
 
 // Create Group
 
@@ -21,6 +25,27 @@ export async function handleCreateGroup(
 // Edit Group
 // Delete Group
 
+// Get Group
+
+export async function handleGetGroup(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  const { id } = req.params;
+
+  if (!id || typeof id !== "string" || !parseInt(id)) {
+    res.status(400).send({ msg: "bad request" });
+    return;
+  }
+
+  try {
+    const data = await getGroupRecord(parseInt(id));
+    res.send({ data, success: true });
+  } catch (err) {
+    next(err);
+  }
+}
 // Get Groups
 export async function handleGetGroups(
   req: Request,

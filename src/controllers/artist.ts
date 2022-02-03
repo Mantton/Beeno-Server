@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { insertArtistRecord } from "../services";
+import { getArtistRecord, insertArtistRecord } from "../services";
 
 // Create Artist
 
@@ -8,9 +8,9 @@ export const handleCreateArtist = async (
   res: Response,
   next: NextFunction
 ) => {
-  const { groupId, companyId, name, imageId } = req.body;
+  const { groupIds, companyId, name, imageId } = req.body;
   try {
-    const data = await insertArtistRecord(name, groupId, companyId, imageId);
+    const data = await insertArtistRecord(name, groupIds, companyId, imageId);
 
     res.send({ data, success: true });
   } catch (err) {
@@ -18,3 +18,24 @@ export const handleCreateArtist = async (
   }
 };
 // Edit Artist
+
+export const handleGetArtist = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const id = req.params.id;
+
+  try {
+    const data = await getArtistRecord(parseInt(id));
+
+    if (!data) {
+      res.status(404).send({ msg: "not found" });
+      return;
+    }
+
+    res.send({ data });
+  } catch (err) {
+    next(err);
+  }
+};

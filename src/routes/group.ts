@@ -11,4 +11,5 @@ groupRouter.post(
   Controller.handleCreateGroup
 );
 
+groupRouter.get("/:id", Controller.handleGetGroup);
 groupRouter.get("/", Controller.handleGetGroups);

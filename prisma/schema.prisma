@@ -67,7 +67,7 @@ model Group {
   image     Image?  @relation(fields: [imageId], references: [id])
 
   imageId Int?
-  artists GroupArtist[]
+  members GroupArtist[]
   @@map("groups")
 }
 
@@ -104,6 +104,9 @@ model Era {
   startDate DateTime? // Release Date
   groupId   Int?
   artistId  Int?
+  imageId   Int?
+
+  image Image? @relation(fields: [imageId], references: [id])
 
   group       Group?       @relation(fields: [groupId], references: [id])
   artist      Artist?      @relation(fields: [artistId], references: [id])
@@ -232,6 +235,7 @@ model Image {
   artists  Artist[]
   sets     CardSet[]
 
+  eras Era[]
   @@map("images")
 }
 
