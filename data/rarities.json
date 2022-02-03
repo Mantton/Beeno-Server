@@ -2,12 +2,12 @@
     {
         "label": "Common",
         "points": 10,
-        "hex": "C0C0C0"
+        "hex": "43aa8b"
     },
     {
         "label": "Uncommon",
         "points": 50,
-        "hex": "00FF00"
+        "hex": "ae2012"
     },
     {
         "label": "Rare",
@@ -17,11 +17,11 @@
     {
         "label": "Ultra Rare",
         "points": 500,
-        "hex": "7209b7"
+        "hex": "7b1cba"
     },
     {
         "label": "Legendary",
         "points": 1000,
-        "hex": "ee9b00"
+        "hex": "f8961e"
     }
 ]
