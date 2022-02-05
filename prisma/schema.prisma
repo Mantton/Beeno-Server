@@ -133,22 +133,18 @@ model Card {
 }
 
 model Collection {
-  id    Int    @id @default(autoincrement())
-  title String @db.VarChar(50)
+  id    Int       @id @default(autoincrement())
+  title String    @db.VarChar(50)
   eraId Int
-
-
-  era  Era       @relation(fields: [eraId], references: [id])
-  sets CardSet[]
-
+  era   Era       @relation(fields: [eraId], references: [id])
+  sets  CardSet[]
 
   @@map("collections")
 }
 
 model CardSet {
-  id     Int      @id @default(autoincrement())
-  title  String   @db.VarChar(50)
-  minted DateTime @default(now())
+  id      Int      @id @default(autoincrement())
+  created DateTime @default(now())
 
   rarityId     Int
   imageId      Int
@@ -176,11 +172,12 @@ model CardSetArtist {
 }
 
 model Rarity {
-  id     Int       @id @unique @default(autoincrement())
-  label  String    @unique @db.VarChar(18)
-  points Int       @unique
-  hex    String    @db.VarChar(6)
-  sets   CardSet[]
+  id       Int       @id @unique @default(autoincrement())
+  label    String    @unique @db.VarChar(18)
+  points   Int       @unique
+  startHex String    @db.VarChar(6)
+  endHex   String    @db.VarChar(6)
+  sets     CardSet[]
 
   @@map("rarity")
 }

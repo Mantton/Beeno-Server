@@ -2,26 +2,31 @@
     {
         "label": "Common",
         "points": 10,
-        "hex": "43aa8b"
+        "startHex": "43aa8b",
+        "endHex": ""
     },
     {
         "label": "Uncommon",
         "points": 50,
-        "hex": "ae2012"
+        "startHex": "ae2012",
+        "endHex": ""
     },
     {
         "label": "Rare",
         "points": 100,
-        "hex": "00c0f0"
+        "startHex": "00c0f0",
+        "endHex": ""
     },
     {
         "label": "Ultra Rare",
         "points": 500,
-        "hex": "7b1cba"
+        "startHex": "7b1cba",
+        "endHex": ""
     },
     {
         "label": "Legendary",
         "points": 1000,
-        "hex": "f8961e"
+        "startHex": "f8961e",
+        "endHex": ""
     }
 ]

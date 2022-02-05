@@ -1,3 +1,4 @@
+import { Rarity } from "@prisma/client";
 import { database } from "../helpers";
 import { logger } from "../utils";
 /**
@@ -9,9 +10,12 @@ import { logger } from "../utils";
 export async function insertRarityRecord(
   label: string,
   points: number,
-  hex: string
+  startHex: string,
+  endHex: string
 ) {
-  return await database.rarity.create({ data: { label, points, hex } });
+  return await database.rarity.create({
+    data: { label, points, startHex, endHex },
+  });
 }
 
 export async function getRarityRecord(id: number) {
@@ -51,4 +55,12 @@ export async function fetchRarityRecord(id: number) {
       id,
     },
   });
+}
+
+export async function getRandomRarity() {
+  // Reference : https://www.prisma.io/docs/concepts/components/prisma-client/raw-database-access
+  const out = await database.$queryRaw<
+    Rarity[]
+  >`SELECT * FROM rarity ORDER BY random() LIMIT 1;`;
+  return out[0];
 }

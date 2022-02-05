@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import {
   editCompanyRecord,
+  getCompanyRecord,
   getCompanyRecords,
   insertCompanyRecord,
 } from "../services";
@@ -64,3 +65,20 @@ export async function handleGetCompanyRecords(
     next(err);
   }
 }
+
+export const handleGetCompany = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const id = req.params.id;
+
+  try {
+    if (!id || !parseInt(id))
+      return res.status(400).send({ msg: "bad request" });
+    const company = await getCompanyRecord(parseInt(id));
+    res.send(company);
+  } catch (err) {
+    next(err);
+  }
+};

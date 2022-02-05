@@ -34,7 +34,7 @@ const multerMid = multer({
 
 // Session Setup
 const RedisStore = connectRedis(session);
-const maxAgeInMinutes = 30;
+const maxAgeInMinutes = 240;
 const sessionStore = session({
   store: new RedisStore({ client: redisClient }),
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion

@@ -17,3 +17,5 @@ companyRouter.post(
 
 // Get Companies
 companyRouter.get("/", Controller.handleGetCompanyRecords);
+
+companyRouter.get("/:id", Controller.handleGetCompany);

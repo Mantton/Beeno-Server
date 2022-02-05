@@ -1,5 +1,9 @@
 import { NextFunction, Request, Response } from "express";
-import { doesAccountExist, isHandleInUse } from "../services";
+import {
+  doesAccountExist,
+  fetchAccountRecord,
+  isHandleInUse,
+} from "../services";
 import { loginUser } from "../services/authentication";
 import { logger } from "../utils";
 
@@ -37,11 +41,28 @@ export const handleLogin = async (
   }
 };
 
-export const handleGetAuthenticatedUser = (req: Request, res: Response) => {
-  if (req.session.account) {
-    res.send({ msg: "Beeno", handle: req.session.account.handle });
-  } else {
-    res.status(401).send({ msg: "unauthorized" });
+export const handleGetAuthenticatedUser = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    if (req.session.account) {
+      const account = await fetchAccountRecord(req.session.account.id);
+
+      if (!account) throw new Error("ERR_VALID_SESSION_NO_ACCOUNT");
+
+      const out = {
+        id: account.id,
+        handle: account.handle,
+        privileges: account.privileges.map((x) => x.privilege),
+      };
+      res.send(out);
+    } else {
+      res.status(401).send({ msg: "unauthorized" });
+    }
+  } catch (err) {
+    next(err);
   }
 };
 

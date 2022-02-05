@@ -114,3 +114,20 @@ export const isHandleInUse = async (handle: string) => {
 
   return true;
 };
+
+export const fetchAccountRecord = async (id: number) => {
+  return await database.account.findUnique({
+    where: {
+      id,
+    },
+    select: {
+      id: true,
+      handle: true,
+      privileges: {
+        select: {
+          privilege: true,
+        },
+      },
+    },
+  });
+};

@@ -3,23 +3,23 @@ import {
   fetchCardCountForSet,
   fetchCardSetArtists,
   fetchCardSetRecord,
-  fetchRarityRecord,
+  getRandomRarity,
   insertCardSetRecord,
-  insertCardsForCardSet,
 } from "../services";
-import { getIterations } from "../utils";
 
 export async function handleCreateCardSet(
   req: Request,
   res: Response,
   next: NextFunction
 ) {
-  const { title, collectionId, rarityId, imageId, artistIds } = req.body;
+  const { collectionId, imageId, artistIds } = req.body;
   try {
+    // Get Random Rarity
+
+    const rarity = await getRandomRarity();
     const set = await insertCardSetRecord(
-      title,
       collectionId,
-      rarityId,
+      rarity.id,
       imageId,
       artistIds
     );

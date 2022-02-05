@@ -68,8 +68,7 @@ export const getEraRecord = async (id: number) => {
           sets: {
             select: {
               id: true,
-              title: true,
-              minted: true,
+              created: true,
               artists: {
                 select: {
                   artistId: true,
@@ -83,7 +82,8 @@ export const getEraRecord = async (id: number) => {
               rarity: {
                 select: {
                   label: true,
-                  hex: true,
+                  startHex: true,
+                  endHex: true,
                 },
               },
             },

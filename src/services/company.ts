@@ -55,5 +55,25 @@ export const getCompanyRecords = async (page: number, sort: number) => {
 export const getCompanyRecord = async (id: number) => {
   return await database.company.findUnique({
     where: { id },
+    select: {
+      id: true,
+      name: true,
+      groups: {
+        select: {
+          id: true,
+          image: {
+            select: {
+              base: true,
+            },
+          },
+          name: true,
+        },
+      },
+      image: {
+        select: {
+          base: true,
+        },
+      },
+    },
   });
 };

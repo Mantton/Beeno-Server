@@ -51,9 +51,7 @@ export const validateCollectionRequest = () => {
 
 export const validateCardSetRequest = () => {
   const schema = Joi.object({
-    title: Joi.string().required().max(25),
     collectionId: Joi.number().required(),
-    rarityId: Joi.number().required(),
     imageId: Joi.number().required(),
     artistIds: Joi.array().items(Joi.number().required()).required(),
   });
