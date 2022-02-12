@@ -82,8 +82,6 @@ export const getEraRecord = async (id: number) => {
               rarity: {
                 select: {
                   label: true,
-                  startHex: true,
-                  endHex: true,
                 },
               },
             },

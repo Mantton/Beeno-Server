@@ -172,12 +172,10 @@ model CardSetArtist {
 }
 
 model Rarity {
-  id       Int       @id @unique @default(autoincrement())
-  label    String    @unique @db.VarChar(18)
-  points   Int       @unique
-  startHex String    @db.VarChar(6)
-  endHex   String    @db.VarChar(6)
-  sets     CardSet[]
+  id     Int       @id @unique @default(autoincrement())
+  label  String    @unique @db.VarChar(18)
+  points Int       @unique
+  sets   CardSet[]
 
   @@map("rarity")
 }

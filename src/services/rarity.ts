@@ -7,14 +7,9 @@ import { logger } from "../utils";
  * @param points The Beeno Points given when card of said rarity is owned
  * @param iterations The number of iterations this card has.
  */
-export async function insertRarityRecord(
-  label: string,
-  points: number,
-  startHex: string,
-  endHex: string
-) {
+export async function insertRarityRecord(label: string, points: number) {
   return await database.rarity.create({
-    data: { label, points, startHex, endHex },
+    data: { label, points },
   });
 }
 
