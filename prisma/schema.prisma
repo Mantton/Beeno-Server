@@ -149,6 +149,7 @@ model CardSet {
   rarity       Int
   imageId      Int
   collectionId Int
+  published    Boolean @default(false)
 
   artists CardSetArtist[]
   cards   Card[]

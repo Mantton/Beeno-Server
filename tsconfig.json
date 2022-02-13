@@ -98,5 +98,5 @@
   },
   "include": [
     "src/**/*.ts"
-    ],
+, "services/privileges.ts", "services/rarity.ts"    ],
 }

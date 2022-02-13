@@ -3,9 +3,9 @@ import {
   fetchCardCountForSet,
   fetchCardSetArtists,
   fetchCardSetRecord,
-  assignRarity,
   insertCardSetRecord,
 } from "../database";
+import { assignRarity } from "../services";
 
 export async function handleCreateCardSet(
   req: Request,
