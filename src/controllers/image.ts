@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { createImage } from "../services";
+import { createImage } from "../database";
 import { isValidImage } from "../validations/imageUpload";
 
 export const handleUploadImage = async (

@@ -3,7 +3,7 @@ import {
   getGroupRecord,
   getGroupRecordsForCompany,
   insertGroupRecord,
-} from "../services";
+} from "../database";
 
 // Create Group
 

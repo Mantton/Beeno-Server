@@ -7,3 +7,11 @@ export enum privileges {
   CRUD_CARDS,
   UPLOAD_IMAGE,
 }
+
+export enum rarities {
+  COMMON,
+  UNCOMMON,
+  RARE,
+  ULTRA_RARE,
+  LEGENDARY,
+}

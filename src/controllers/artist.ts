@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { getArtistRecord, insertArtistRecord } from "../services";
+import { getArtistRecord, insertArtistRecord } from "../database";
 
 // Create Artist
 

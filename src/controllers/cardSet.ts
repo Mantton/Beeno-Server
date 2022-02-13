@@ -3,9 +3,9 @@ import {
   fetchCardCountForSet,
   fetchCardSetArtists,
   fetchCardSetRecord,
-  getRandomRarity,
+  assignRarity,
   insertCardSetRecord,
-} from "../services";
+} from "../database";
 
 export async function handleCreateCardSet(
   req: Request,
@@ -14,12 +14,10 @@ export async function handleCreateCardSet(
 ) {
   const { collectionId, imageId, artistIds } = req.body;
   try {
-    // Get Random Rarity
-
-    const rarity = await getRandomRarity();
+    const rarity = await assignRarity();
     const set = await insertCardSetRecord(
       collectionId,
-      rarity.id,
+      rarity,
       imageId,
       artistIds
     );

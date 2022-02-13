@@ -146,13 +146,12 @@ model CardSet {
   id      Int      @id @default(autoincrement())
   created DateTime @default(now())
 
-  rarityId     Int
+  rarity       Int
   imageId      Int
   collectionId Int
 
   artists CardSetArtist[]
   cards   Card[]
-  rarity  Rarity          @relation(fields: [rarityId], references: [id])
   image   Image           @relation(fields: [imageId], references: [id])
 
   collection Collection @relation(fields: [collectionId], references: [id])
@@ -169,15 +168,6 @@ model CardSetArtist {
   @@id([setId, artistId])
   @@unique([setId, artistId])
   @@map("cardset_artists")
-}
-
-model Rarity {
-  id     Int       @id @unique @default(autoincrement())
-  label  String    @unique @db.VarChar(18)
-  points Int       @unique
-  sets   CardSet[]
-
-  @@map("rarity")
 }
 
 model TradeOffer {

@@ -14,7 +14,7 @@ import {
   setRouter,
 } from "./routes";
 import { imageRouter } from "./routes/image";
-import { createSuperUser, seedRarities } from "./services/";
+import { createSuperUser } from "./database";
 import { logger } from "./utils";
 import redisClient from "./helpers/redis";
 import { authRouter } from "./routes/auth";
@@ -73,9 +73,6 @@ createSuperUser().catch((err) => {
   process.exit(1);
 });
 
-seedRarities().catch((err) => {
-  logger.error("Failed to Seed " + err.message);
-});
 // Routes
 app.use("/company", companyRouter);
 app.use("/image", imageRouter);

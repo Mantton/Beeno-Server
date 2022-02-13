@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { insertCollectionRecord } from "../services/collection";
+import { insertCollectionRecord } from "../database/collection";
 
 export async function handleCreateCollection(
   req: Request,

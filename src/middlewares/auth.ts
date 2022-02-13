@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { hasNecessaryPrivileges } from "../services";
+import { hasNecessaryPrivileges } from "../database";
 
 export const requiresAuthentication = async (
   req: Request,

@@ -4,7 +4,7 @@ import {
   getCompanyRecord,
   getCompanyRecords,
   insertCompanyRecord,
-} from "../services";
+} from "../database";
 
 export const handleCreateCompany = async (
   req: Request,

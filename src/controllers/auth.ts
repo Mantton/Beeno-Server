@@ -3,8 +3,8 @@ import {
   doesAccountExist,
   fetchAccountRecord,
   isHandleInUse,
-} from "../services";
-import { loginUser } from "../services/authentication";
+} from "../database";
+import { loginUser } from "../database/authentication";
 import { logger } from "../utils";
 
 export const handleLogin = async (

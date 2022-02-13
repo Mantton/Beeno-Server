@@ -15,10 +15,6 @@ export const randomNumber = (min: number, max: number) => {
  */
 export const getIterations = (name: string): number => {
   switch (name.toLowerCase()) {
-    case "omnipotent":
-      return 1;
-    case "ascended":
-      return 5;
     case "legendary":
       return 10;
     case "ultra rare":

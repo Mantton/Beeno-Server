@@ -3,7 +3,7 @@ import {
   getEraRecord,
   getEraRecordsForGroup,
   insertEraRecordForGroup,
-} from "../services";
+} from "../database";
 
 export async function handleCreateEraForGroup(
   req: Request,
