@@ -28,3 +28,10 @@ export const getIterations = (name: string): number => {
       return randomNumber(650, 1150);
   }
 };
+
+export const sortRarity = (a: number, b: number) => {
+  if (a > b) return -1;
+  if (a === b) return 0;
+  if (a < b) return 1;
+  return 0;
+};

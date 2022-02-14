@@ -1,5 +1,64 @@
 import { database } from "../helpers";
 
+const eraQuery = {
+  id: true,
+  title: true,
+  image: {
+    select: {
+      base: true,
+    },
+  },
+  group: {
+    select: {
+      id: true,
+      name: true,
+      image: {
+        select: {
+          base: true,
+        },
+      },
+      members: {
+        select: {
+          artist: {
+            select: {
+              name: true,
+              id: true,
+              image: {
+                select: {
+                  base: true,
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+  },
+
+  collections: {
+    select: {
+      id: true,
+      title: true,
+      sets: {
+        select: {
+          id: true,
+          created: true,
+          artists: {
+            select: {
+              artistId: true,
+            },
+          },
+          image: {
+            select: {
+              base: true,
+            },
+          },
+          rarity: true,
+        },
+      },
+    },
+  },
+};
 export const insertEraRecordForGroup = async (
   title: string,
   groupId: number,
@@ -26,65 +85,7 @@ export const getEraRecord = async (id: number) => {
     where: {
       id,
     },
-    select: {
-      id: true,
-      title: true,
-      image: {
-        select: {
-          base: true,
-        },
-      },
-      group: {
-        select: {
-          id: true,
-          name: true,
-          image: {
-            select: {
-              base: true,
-            },
-          },
-          members: {
-            select: {
-              artist: {
-                select: {
-                  name: true,
-                  id: true,
-                  image: {
-                    select: {
-                      base: true,
-                    },
-                  },
-                },
-              },
-            },
-          },
-        },
-      },
-
-      collections: {
-        select: {
-          id: true,
-          title: true,
-          sets: {
-            select: {
-              id: true,
-              created: true,
-              artists: {
-                select: {
-                  artistId: true,
-                },
-              },
-              image: {
-                select: {
-                  base: true,
-                },
-              },
-              rarity: true,
-            },
-          },
-        },
-      },
-    },
+    select: eraQuery,
   });
 };
 
@@ -93,5 +94,6 @@ export const getEraRecordsForGroup = async (groupId: number) => {
     where: {
       groupId,
     },
+    select: eraQuery,
   });
 };

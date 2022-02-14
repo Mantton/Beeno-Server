@@ -1,5 +1,5 @@
 export const APP_NAME = "Beeno";
-
+export const DEFAULT_IMAGE = "/icon.png";
 export enum privileges {
   SUPERUSER,
   CRUD_CAG, // CAG: Company, Artist, Groups
@@ -15,3 +15,7 @@ export enum rarities {
   ULTRA_RARE,
   LEGENDARY,
 }
+
+export const cleanRarities = Object.keys(rarities)
+  .filter((key: any) => isNaN(Number(rarities[key])))
+  .map((x) => parseInt(x));
