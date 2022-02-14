@@ -8,3 +8,18 @@ export async function insertCollectionRecord(title: string, eraId: number) {
     },
   });
 }
+
+export async function fetchCollectionRecord(id: number) {
+  return await database.collection.findUnique({
+    where: {
+      id,
+    },
+  });
+}
+export async function deleteCollectionRecord(id: number) {
+  return await database.collection.delete({
+    where: {
+      id,
+    },
+  });
+}

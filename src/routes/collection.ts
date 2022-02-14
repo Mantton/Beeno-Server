@@ -11,3 +11,9 @@ collectionRouter.post(
   [requiresPrivilege(privileges.CRUD_ECS), validateCollectionRequest()],
   Controller.handleCreateCollection
 );
+
+collectionRouter.get(
+  "/delete/:id",
+  [requiresPrivilege(privileges.CRUD_ECS)],
+  Controller.handleDeleteCollection
+);

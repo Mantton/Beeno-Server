@@ -2,17 +2,17 @@ import { rarities } from "../config/constants";
 import { probability } from "../utils/probability";
 
 export async function assignRarity() {
-  if (probability(3)) {
-    // 3%
+  if (probability(1)) {
+    // 2%
     return rarities.LEGENDARY;
-  } else if (probability(7)) {
-    // 7%
+  } else if (probability(5)) {
+    // 5%
     return rarities.ULTRA_RARE;
-  } else if (probability(15)) {
-    // 15%
+  } else if (probability(10)) {
+    // 12%
     return rarities.RARE;
-  } else if (probability(25)) {
-    // 25%
+  } else if (probability(20)) {
+    // 20%
     return rarities.UNCOMMON;
   }
 

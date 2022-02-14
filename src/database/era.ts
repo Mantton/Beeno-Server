@@ -97,3 +97,18 @@ export const getEraRecordsForGroup = async (groupId: number) => {
     select: eraQuery,
   });
 };
+
+export const deleteEraRecord = async (id: number) => {
+  const era = await database.era.findFirst({
+    where: {
+      id,
+    },
+  });
+
+  if (!era) return null;
+  return await database.era.delete({
+    where: {
+      id,
+    },
+  });
+};

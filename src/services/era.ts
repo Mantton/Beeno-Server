@@ -31,6 +31,7 @@ export const getEra = async (id: number) => {
       }),
   }));
 
+  // Rarity Breakdown Logic
   type res = { [key: string]: number };
   const byRarity: res = {};
   const byMember: { [key: string]: res } = {};

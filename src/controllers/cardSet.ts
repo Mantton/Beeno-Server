@@ -1,11 +1,13 @@
 import { NextFunction, Request, Response } from "express";
+import { BAD_REQUEST } from "../config/constants";
 import {
+  deleteCardSetRecord,
   fetchCardCountForSet,
   fetchCardSetArtists,
   fetchCardSetRecord,
   insertCardSetRecord,
 } from "../database";
-import { assignRarity } from "../services";
+import { assignRarity, deleteCardSet } from "../services";
 
 export async function handleCreateCardSet(
   req: Request,
@@ -36,17 +38,36 @@ export const handleGetCardSet = async (
   res: Response,
   next: NextFunction
 ) => {
-  const id = req.params.id;
+  const id = parseInt(req.params.id);
 
-  if (!parseInt(id)) return res.status(400).send({ msg: "bad request" });
+  if (!id) return res.status(400).send(BAD_REQUEST);
+
   try {
-    const data = await fetchCardSetRecord(parseInt(id));
+    const data = await fetchCardSetRecord(id);
 
     res.send({ data });
   } catch (err) {
     next(err);
   }
 };
+
+export async function handleDeleteCardSet(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  try {
+    const id = parseInt(req.params.id);
+
+    if (!id) return res.status(400).send(BAD_REQUEST);
+
+    const data = await deleteCardSet(id);
+    if (!data) return res.status(400).send(BAD_REQUEST);
+    res.send({ data, deleted: true });
+  } catch (err) {
+    next(err);
+  }
+}
 
 export async function handlePublishCardSet(
   req: Request,

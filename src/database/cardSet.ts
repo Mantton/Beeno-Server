@@ -103,3 +103,9 @@ export async function fetchCardCountForSet(id: number) {
     },
   });
 }
+
+export async function deleteCardSetRecord(id: number) {
+  return database.cardSet.delete({
+    where: { id },
+  });
+}

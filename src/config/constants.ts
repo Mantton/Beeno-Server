@@ -1,5 +1,7 @@
 export const APP_NAME = "Beeno";
 export const DEFAULT_IMAGE = "/icon.png";
+
+export const BAD_REQUEST = { msg: "bad request" };
 export enum privileges {
   SUPERUSER,
   CRUD_CAG, // CAG: Company, Artist, Groups

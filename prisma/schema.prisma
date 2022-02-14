@@ -136,7 +136,7 @@ model Collection {
   id    Int       @id @default(autoincrement())
   title String    @db.VarChar(50)
   eraId Int
-  era   Era       @relation(fields: [eraId], references: [id])
+  era   Era       @relation(fields: [eraId], references: [id], onDelete: Cascade)
   sets  CardSet[]
 
   @@map("collections")
@@ -155,7 +155,7 @@ model CardSet {
   cards   Card[]
   image   Image           @relation(fields: [imageId], references: [id])
 
-  collection Collection @relation(fields: [collectionId], references: [id])
+  collection Collection @relation(fields: [collectionId], references: [id], onDelete: Cascade)
   @@map("cardsets")
 }
 
@@ -163,7 +163,7 @@ model CardSetArtist {
   setId    Int
   artistId Int
 
-  set    CardSet @relation(fields: [setId], references: [id])
+  set    CardSet @relation(fields: [setId], references: [id], onDelete: Cascade)
   artist Artist  @relation(fields: [artistId], references: [id])
 
   @@id([setId, artistId])

@@ -6,6 +6,11 @@ import * as Controller from "../controllers/era";
 
 export const eraRouter = Router();
 
+eraRouter.get(
+  "/delete/:id",
+  requiresPrivilege(privileges.CRUD_ECS),
+  Controller.handleDeleteEra
+);
 eraRouter.get("/:id", Controller.handleGetEra);
 eraRouter.get("/group/:id", Controller.handleGetEraForGroup);
 

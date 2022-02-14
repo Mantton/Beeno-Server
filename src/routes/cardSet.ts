@@ -11,5 +11,10 @@ setRouter.post(
   [requiresPrivilege(privileges.CRUD_ECS), validateCardSetRequest()],
   Controller.handleCreateCardSet
 );
+setRouter.get("/delete/:id", Controller.handleDeleteCardSet);
 
-setRouter.get("/:id", Controller.handleGetCardSet);
+setRouter.get(
+  "/:id",
+  [requiresPrivilege(privileges.CRUD_ECS)],
+  Controller.handleGetCardSet
+);

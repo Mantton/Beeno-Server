@@ -1,5 +1,10 @@
 import { Request, Response, NextFunction } from "express";
-import { getEraRecordsForGroup, insertEraRecordForGroup } from "../database";
+import { BAD_REQUEST } from "../config/constants";
+import {
+  deleteEraRecord,
+  getEraRecordsForGroup,
+  insertEraRecordForGroup,
+} from "../database";
 import { getEra } from "../services/era";
 
 export async function handleCreateEraForGroup(
@@ -49,6 +54,25 @@ export const handleGetEra = async (
     if (!parseInt) return res.status(400).send({ msg: "bad request" });
 
     const data = await getEra(parseInt(id));
+    res.send({ data });
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const handleDeleteEra = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const id = parseInt(req.params.id);
+
+  try {
+    if (!id) return res.status(400).send(BAD_REQUEST);
+
+    const data = await deleteEraRecord(id);
+
+    if (!data) return res.status(400).send(BAD_REQUEST);
     res.send({ data });
   } catch (err) {
     next(err);
