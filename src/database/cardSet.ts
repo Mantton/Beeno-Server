@@ -51,7 +51,7 @@ export const fetchCardSetRecord = async (id: number) => {
 };
 export const insertCardSetRecord = async (
   collectionId: number,
-  rarity: number,
+  rarityId: number,
   imageId: number,
   artistIds: number[]
 ) => {
@@ -63,7 +63,7 @@ export const insertCardSetRecord = async (
     const set = await repo.cardSet.create({
       data: {
         collectionId,
-        rarity,
+        rarityId,
         imageId,
       },
     });

@@ -27,7 +27,7 @@ export const getEra = async (id: number) => {
         artistIds: set.artists.map((entry) => entry.artistId),
       }))
       .sort((a, b) => {
-        return sortRarity(a.rarity, b.rarity);
+        return sortRarity(a.rarity.id, b.rarity.id);
       }),
   }));
 
@@ -38,7 +38,7 @@ export const getEra = async (id: number) => {
   const allSets = collections.flatMap((x) => x.sets);
 
   for (const rarity of cleanRarities) {
-    const count = allSets.filter((s) => s.rarity === rarity).length;
+    const count = allSets.filter((s) => s.rarity.id === rarity).length;
     byRarity[rarity] = count;
   }
 
@@ -47,7 +47,7 @@ export const getEra = async (id: number) => {
 
     for (const rarity of cleanRarities) {
       const count = allSets.filter(
-        (s) => s.rarity === rarity && s.artistIds.includes(member.id)
+        (s) => s.rarity.id === rarity && s.artistIds.includes(member.id)
       ).length;
       result[rarity] = count;
     }

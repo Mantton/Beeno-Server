@@ -20,6 +20,7 @@ import redisClient from "./helpers/redis";
 import { authRouter } from "./routes/auth";
 import { morganLogger } from "./utils/morgan";
 import { groupRouter } from "./routes/group";
+import { seedRarities } from "./database/rarity";
 
 const app = express();
 // app.options("*", cors({origin: []}));
@@ -72,6 +73,8 @@ createSuperUser().catch((err) => {
   logger.error("Failed to Create SuperUser " + err.message);
   process.exit(1);
 });
+
+seedRarities();
 
 // Routes
 app.use("/company", companyRouter);

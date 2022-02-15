@@ -1,0 +1,27 @@
+[
+    {
+        "id": 0,
+        "label": "Common",
+        "points": 50
+    },
+    {
+        "id": 1,
+        "label": "Uncommon",
+        "points": 100
+    },
+    {
+        "id": 2,
+        "label": "Rare",
+        "points": 250
+    },
+    {
+        "id": 3,
+        "label": "Ultra Rare",
+        "points": 500
+    },
+    {
+        "id": 4,
+        "label": "Legendary",
+        "points": 1000
+    }
+]

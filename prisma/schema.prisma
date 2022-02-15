@@ -146,17 +146,26 @@ model CardSet {
   id      Int      @id @default(autoincrement())
   created DateTime @default(now())
 
-  rarity       Int
+  rarityId     Int
   imageId      Int
   collectionId Int
   published    Boolean @default(false)
 
-  artists CardSetArtist[]
-  cards   Card[]
-  image   Image           @relation(fields: [imageId], references: [id])
-
-  collection Collection @relation(fields: [collectionId], references: [id], onDelete: Cascade)
+  artists    CardSetArtist[]
+  cards      Card[]
+  rarity     Rarity          @relation(fields: [rarityId], references: [id])
+  image      Image           @relation(fields: [imageId], references: [id])
+  collection Collection      @relation(fields: [collectionId], references: [id], onDelete: Cascade)
   @@map("cardsets")
+}
+
+model Rarity {
+  id     Int    @id @default(autoincrement())
+  label  String @db.VarChar(20)
+  points Int
+
+  CardSet CardSet[]
+  @@map("rarities")
 }
 
 model CardSetArtist {

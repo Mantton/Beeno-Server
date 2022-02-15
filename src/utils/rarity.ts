@@ -7,7 +7,6 @@
 export const randomNumber = (min: number, max: number) => {
   return Math.random() * (max - min) + min;
 };
-
 /**
  *
  * @param name name of the rarity
@@ -18,14 +17,14 @@ export const getIterations = (name: string): number => {
     case "legendary":
       return 10;
     case "ultra rare":
-      return 20;
+      return 50;
     case "rare":
-      return randomNumber(70, 100);
+      return 250;
     case "uncommon":
-      return randomNumber(350, 500);
+      return 450;
     case "common":
     default:
-      return randomNumber(650, 1150);
+      return 750;
   }
 };
 
