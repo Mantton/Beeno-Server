@@ -1,4 +1,4 @@
-import { Prisma } from "@prisma/client";
+// import { Prisma } from "@prisma/client";
 
 // Prisma.ImageSelect
 export const IMAGE_SELECT = {

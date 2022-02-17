@@ -1,4 +1,3 @@
-import { Prisma } from "@prisma/client";
 import { database } from "../helpers";
 import { ERA_SELECT } from "./prisma_select";
 
