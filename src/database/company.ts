@@ -1,4 +1,5 @@
 import { database } from "../helpers";
+import { COMPANY_SELECT, GROUP_SELECT, IMAGE_SELECT } from "./prisma_select";
 
 /**
  * Creates a New Company
@@ -9,7 +10,10 @@ export const insertCompanyRecord = async (
   name: string,
   imageId: number | undefined
 ) => {
-  const company = await database.company.create({ data: { name, imageId } });
+  const company = await database.company.create({
+    data: { name, imageId },
+    select: COMPANY_SELECT,
+  });
   return company;
 };
 
@@ -26,6 +30,7 @@ export const editCompanyRecord = async (
       name,
       imageId,
     },
+    select: COMPANY_SELECT,
   });
 
   return updated;
@@ -42,9 +47,7 @@ export const getCompanyRecords = async (page: number, sort: number) => {
       id: true,
       name: true,
       image: {
-        select: {
-          base: true,
-        },
+        select: IMAGE_SELECT,
       },
     },
   });
@@ -55,25 +58,6 @@ export const getCompanyRecords = async (page: number, sort: number) => {
 export const getCompanyRecord = async (id: number) => {
   return await database.company.findUnique({
     where: { id },
-    select: {
-      id: true,
-      name: true,
-      groups: {
-        select: {
-          id: true,
-          image: {
-            select: {
-              base: true,
-            },
-          },
-          name: true,
-        },
-      },
-      image: {
-        select: {
-          base: true,
-        },
-      },
-    },
+    select: COMPANY_SELECT,
   });
 };

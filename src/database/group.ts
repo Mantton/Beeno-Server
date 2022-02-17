@@ -1,4 +1,5 @@
 import { database } from "../helpers";
+import { ARTIST_SELECT, IMAGE_SELECT } from "./prisma_select";
 export const insertGroupRecord = async (
   name: string,
   companyId: number,
@@ -18,9 +19,7 @@ export const getGroupRecord = async (id: number) => {
 
     select: {
       image: {
-        select: {
-          base: true,
-        },
+        select: IMAGE_SELECT,
       },
       id: true,
       name: true,
@@ -39,16 +38,7 @@ export const getGroupRecord = async (id: number) => {
       members: {
         select: {
           artist: {
-            select: {
-              id: true,
-              name: true,
-
-              image: {
-                select: {
-                  base: true,
-                },
-              },
-            },
+            select: ARTIST_SELECT,
           },
         },
       },
