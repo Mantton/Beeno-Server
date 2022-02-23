@@ -4,6 +4,7 @@ import {
   getGroupRecordsForCompany,
   insertGroupRecord,
 } from "../database";
+import { getGroup } from "../services/group";
 
 // Create Group
 
@@ -40,8 +41,10 @@ export async function handleGetGroup(
   }
 
   try {
-    const data = await getGroupRecord(parseInt(id));
-    res.send({ data, success: true });
+    const data = await getGroup(parseInt(id));
+
+    if (!data) return res.status(404).send({ msg: "not found" });
+    res.send(data);
   } catch (err) {
     next(err);
   }

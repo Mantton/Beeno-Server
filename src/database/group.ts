@@ -23,7 +23,15 @@ export const getGroupRecord = async (id: number) => {
       },
       id: true,
       name: true,
-      companyId: true,
+      company: {
+        select: {
+          id: true,
+          name: true,
+          image: {
+            select: IMAGE_SELECT,
+          },
+        },
+      },
       eras: {
         select: {
           title: true,
