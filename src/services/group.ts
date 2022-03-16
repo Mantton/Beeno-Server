@@ -40,7 +40,8 @@ export async function getGroup(id: number) {
 
   return {
     id: group.id,
-    imageUrl: imageUrl(group.image),
+    bannerImageUrl: imageUrl(group.bannerImage),
+    logoImageUrl: imageUrl(group.logoImage),
     name: group.name,
 
     company: {

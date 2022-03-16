@@ -64,10 +64,15 @@ model Group {
   companyId Int
   eras      Era[]
   company   Company @relation(fields: [companyId], references: [id])
-  image     Image?  @relation(fields: [imageId], references: [id])
 
-  imageId Int?
-  members GroupArtist[]
+  bannerImageId Int?
+  logoImageId   Int?
+  members       GroupArtist[]
+
+
+  bannerImage Image? @relation("banner_image", fields: [bannerImageId], references: [id])
+  logoImage   Image? @relation("logo_image", fields: [logoImageId], references: [id])
+
   @@map("groups")
 }
 
@@ -226,11 +231,14 @@ model Image {
 
   uploader Account   @relation(fields: [uploaderId], references: [id])
   company  Company[]
-  groups   Group[]
   artists  Artist[]
   sets     CardSet[]
 
   eras Era[]
+
+
+  bannerGroups Group[] @relation("banner_image")
+  logoGroups   Group[] @relation("logo_image")
   @@map("images")
 }
 

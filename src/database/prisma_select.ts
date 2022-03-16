@@ -1,5 +1,7 @@
 // import { Prisma } from "@prisma/client";
 
+import { Prisma } from "@prisma/client";
+
 // Prisma.ImageSelect
 export const IMAGE_SELECT = {
   base: true,
@@ -26,11 +28,14 @@ export const GROUP_ARTIST_SELECT = {
 export const GROUP_SELECT = {
   id: true,
   name: true,
-  image: {
-    select: IMAGE_SELECT,
-  },
   members: {
     select: GROUP_ARTIST_SELECT,
+  },
+  bannerImage: {
+    select: IMAGE_SELECT,
+  },
+  logoImage: {
+    select: IMAGE_SELECT,
   },
 };
 
@@ -65,6 +70,7 @@ export const CARD_SET_SELECT = {
     select: IMAGE_SELECT,
   },
   rarity: true, // Every field in the rarity object is used
+  collectionId: true,
 };
 
 // Prisma.CollectionSelect

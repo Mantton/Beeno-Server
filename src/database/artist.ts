@@ -66,11 +66,6 @@ export const getArtistRecord = async (id: number) => {
             select: {
               id: true,
               name: true,
-              image: {
-                select: {
-                  base: true,
-                },
-              },
             },
           },
         },

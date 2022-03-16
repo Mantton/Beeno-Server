@@ -6,7 +6,8 @@ export const validateGroupRequest = () => {
   const schema = Joi.object({
     name: Joi.string().required().max(40),
     companyId: Joi.number().required(),
-    imageId: Joi.number().required(),
+    bannerImageId: Joi.number().required(),
+    logoImageId: Joi.number().required(),
   });
 
   return validateRequest(schema);

@@ -54,7 +54,7 @@ export const handleGetEra = async (
     if (!parseInt) return res.status(400).send({ msg: "bad request" });
 
     const data = await getEra(parseInt(id));
-    res.send({ data });
+    res.send(data);
   } catch (err) {
     next(err);
   }
@@ -73,7 +73,7 @@ export const handleDeleteEra = async (
     const data = await deleteEraRecord(id);
 
     if (!data) return res.status(400).send(BAD_REQUEST);
-    res.send({ data });
+    res.send(data);
   } catch (err) {
     next(err);
   }

@@ -1,10 +1,6 @@
 import { NextFunction, Request, Response } from "express";
-import {
-  editCompanyRecord,
-  getCompanyRecord,
-  getCompanyRecords,
-  insertCompanyRecord,
-} from "../database";
+import { editCompanyRecord, insertCompanyRecord } from "../database";
+import { getCompanies, getCompany } from "../services";
 
 export const handleCreateCompany = async (
   req: Request,
@@ -51,10 +47,7 @@ export async function handleGetCompanyRecords(
     const { page, sort } = req.query;
 
     if (typeof page === "string" && typeof sort === "string") {
-      const data = await getCompanyRecords(
-        parseInt(page) ?? 1,
-        parseInt(sort) ?? 0
-      );
+      const data = await getCompanies(parseInt(page) ?? 1, parseInt(sort) ?? 0);
 
       res.send(data);
       return;
@@ -76,7 +69,9 @@ export const handleGetCompany = async (
   try {
     if (!id || !parseInt(id))
       return res.status(400).send({ msg: "bad request" });
-    const company = await getCompanyRecord(parseInt(id));
+    const company = await getCompany(parseInt(id));
+
+    if (!company) return res.status(404).send({ msg: "not found" });
     res.send(company);
   } catch (err) {
     next(err);

@@ -1,6 +1,5 @@
 import { NextFunction, Request, Response } from "express";
 import {
-  getGroupRecord,
   getGroupRecordsForCompany,
   insertGroupRecord,
 } from "../database";
@@ -13,10 +12,10 @@ export async function handleCreateGroup(
   res: Response,
   next: NextFunction
 ) {
-  const { companyId, name, imageId } = req.body;
+  const { companyId, name, bannerImageId, logoImageId } = req.body;
 
   try {
-    const data = await insertGroupRecord(name, companyId, imageId);
+    const data = await insertGroupRecord(name, companyId, bannerImageId, logoImageId);
 
     res.send({ data, success: true });
   } catch (err) {

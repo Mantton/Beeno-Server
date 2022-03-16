@@ -68,7 +68,8 @@ export const getEra = async (id: number) => {
     group: {
       id: group.id,
       name: group.name,
-      imageUrl: imageUrl(group.image),
+      bannerImageUrl: imageUrl(group.bannerImage),
+      logoImageUrl: imageUrl(group.logoImage),
       members,
     },
 

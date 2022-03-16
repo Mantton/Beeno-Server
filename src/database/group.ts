@@ -3,11 +3,12 @@ import { ARTIST_SELECT, IMAGE_SELECT } from "./prisma_select";
 export const insertGroupRecord = async (
   name: string,
   companyId: number,
-  imageId: number | undefined = undefined
+  bannerImageId: number | undefined = undefined,
+  logoImageId: number | undefined = undefined
 ) => {
   return await database.group.create({
-    data: { name, companyId, imageId },
-    include: { image: true },
+    data: { name, companyId, bannerImageId, logoImageId },
+    include: { bannerImage: true, logoImage: true },
   });
 };
 
@@ -18,7 +19,10 @@ export const getGroupRecord = async (id: number) => {
     },
 
     select: {
-      image: {
+      bannerImage: {
+        select: IMAGE_SELECT,
+      },
+      logoImage: {
         select: IMAGE_SELECT,
       },
       id: true,
@@ -58,7 +62,8 @@ export const getGroupRecordsForCompany = async (companyId: number) => {
   return await database.group.findMany({
     where: { companyId },
     include: {
-      image: true,
+      bannerImage: true,
+      logoImage: true,
     },
   });
 };
