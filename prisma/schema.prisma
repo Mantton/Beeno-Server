@@ -118,6 +118,7 @@ model Era {
   sets   Set[]
   @@unique([title, groupId])
   @@map("eras")
+  Card Card[]
 }
 
 // Individual Card Item
@@ -155,6 +156,7 @@ model Card {
   rarityId  Int
   imageId   Int
   setId     Int?
+  eraId     Int
   published Boolean @default(false)
 
   artists CardArtist[]
@@ -162,6 +164,7 @@ model Card {
   rarity  Rarity       @relation(fields: [rarityId], references: [id])
   image   Image        @relation(fields: [imageId], references: [id])
   set     Set?         @relation(fields: [setId], references: [id], onDelete: Cascade)
+  era     Era          @relation(fields: [eraId], references: [id], onDelete: Cascade)
   @@map("cards")
 }
 

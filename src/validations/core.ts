@@ -6,7 +6,7 @@ export const validateGroupRequest = () => {
   const schema = Joi.object({
     name: Joi.string().required().max(40),
     companyId: Joi.number().required(),
-    bannerImageId: Joi.number().required(),
+    bannerImageId: Joi.number(),
     logoImageId: Joi.number().required(),
   });
 
@@ -50,11 +50,12 @@ export const validateCollectionRequest = () => {
 
 // CARD SET
 
-export const validateCardSetRequest = () => {
+export const validateCardCreationRequest = () => {
   const schema = Joi.object({
-    collectionId: Joi.number().required(),
-    imageId: Joi.number().required(),
-    artistIds: Joi.array().items(Joi.number().required()).required(),
+    eraId: Joi.number().integer().required(),
+    setId: Joi.number().integer(),
+    imageId: Joi.number().integer().required(),
+    artistIds: Joi.array().items(Joi.number().integer().required()).required(),
   });
 
   return validateRequest(schema);

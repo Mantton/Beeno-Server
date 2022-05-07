@@ -6,7 +6,7 @@ import compression from "compression";
 import connectRedis from "connect-redis";
 import session from "express-session";
 import { errorHandler } from "./helpers";
-import { artistRouter, companyRouter } from "./routes";
+import { artistRouter, CardRouter, companyRouter } from "./routes";
 import { imageRouter } from "./routes/image";
 import { createSuperUser } from "./database";
 import { logger } from "./utils";
@@ -15,6 +15,7 @@ import { authRouter } from "./routes/auth";
 import { morganLogger } from "./utils/morgan";
 import { groupRouter } from "./routes/group";
 import { seedRarities } from "./database/rarity";
+import { EraRouter } from "./routes/era";
 
 const app = express();
 // app.options("*", cors({origin: []}));
@@ -76,12 +77,13 @@ app.use("/image", imageRouter);
 app.use("/auth", authRouter);
 app.use("/group", groupRouter);
 app.use("/artist", artistRouter);
-
+app.use("/cards", CardRouter);
+app.use("/eras", EraRouter);
 // Error Handler
 app.use(errorHandler);
 
 app.use("*", (req: Request, res: Response) => {
-  res.status(400).send({ msg: "bad req" });
+  res.status(400).send({ msg: "bad route" });
 });
 
 export default app;

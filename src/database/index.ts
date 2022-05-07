@@ -3,3 +3,4 @@ export * from "./artist";
 export * from "./company";
 export * from "./group";
 export * from "./image";
+export * from "./card";
