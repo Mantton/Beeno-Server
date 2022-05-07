@@ -6,13 +6,7 @@ import compression from "compression";
 import connectRedis from "connect-redis";
 import session from "express-session";
 import { errorHandler } from "./helpers";
-import {
-  artistRouter,
-  companyRouter,
-  eraRouter,
-  collectionRouter,
-  setRouter,
-} from "./routes";
+import { artistRouter, companyRouter } from "./routes";
 import { imageRouter } from "./routes/image";
 import { createSuperUser } from "./database";
 import { logger } from "./utils";
@@ -82,9 +76,6 @@ app.use("/image", imageRouter);
 app.use("/auth", authRouter);
 app.use("/group", groupRouter);
 app.use("/artist", artistRouter);
-app.use("/era", eraRouter);
-app.use("/collection", collectionRouter);
-app.use("/set", setRouter);
 
 // Error Handler
 app.use(errorHandler);

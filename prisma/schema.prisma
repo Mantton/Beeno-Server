@@ -18,7 +18,7 @@ model Account {
   emailVerified   Boolean      @default(false)
   phoneVerified   Boolean      @default(false)
   // Relations
-  cards           Card[]
+  cards           CardItem[]
   initiatedTrades TradeOffer[] @relation("initiator")
   receivedTrades  TradeOffer[] @relation("recipient")
   tradePieces     TradePiece[]
@@ -86,7 +86,7 @@ model Artist {
   // Relations
   company Company @relation(fields: [companyId], references: [id])
 
-  references CardSetArtist[]
+  references CardArtist[]
   imageId    Int?
   soloEras   Era[]
   groups     GroupArtist[]
@@ -113,55 +113,56 @@ model Era {
 
   image Image? @relation(fields: [imageId], references: [id])
 
-  group       Group?       @relation(fields: [groupId], references: [id])
-  artist      Artist?      @relation(fields: [artistId], references: [id])
-  collections Collection[]
+  group  Group?  @relation(fields: [groupId], references: [id])
+  artist Artist? @relation(fields: [artistId], references: [id])
+  sets   Set[]
   @@unique([title, groupId])
   @@map("eras")
 }
 
-model Card {
+// Individual Card Item
+model CardItem {
   id      Int  @id @default(autoincrement())
   ownerId Int?
 
   // Name Identifiers:  Era.title - Artist Name Conjunction - Version - Iteration e.g "HYLT Rosé Version 5 #453"
   iteration Int
-  setId     Int
+  cardId    Int
 
 
   // Relations
   owner        Account?     @relation(fields: [ownerId], references: [id])
-  set          CardSet      @relation(fields: [setId], references: [id])
+  card         Card         @relation(fields: [cardId], references: [id])
   pieceHistory TradePiece[]
-  @@unique([setId, iteration])
-  @@map("cards")
+  @@unique([cardId, iteration])
+  @@map("cards_items")
 }
 
-model Collection {
-  id    Int       @id @default(autoincrement())
-  title String    @db.VarChar(50)
+model Set {
+  id    Int    @id @default(autoincrement())
+  title String @db.VarChar(50)
   eraId Int
-  era   Era       @relation(fields: [eraId], references: [id], onDelete: Cascade)
-  sets  CardSet[]
+  era   Era    @relation(fields: [eraId], references: [id], onDelete: Cascade)
+  cards Card[]
 
-  @@map("collections")
+  @@map("sets")
 }
 
-model CardSet {
+model Card {
   id      Int      @id @default(autoincrement())
   created DateTime @default(now())
 
-  rarityId     Int
-  imageId      Int
-  collectionId Int
-  published    Boolean @default(false)
+  rarityId  Int
+  imageId   Int
+  setId     Int?
+  published Boolean @default(false)
 
-  artists    CardSetArtist[]
-  cards      Card[]
-  rarity     Rarity          @relation(fields: [rarityId], references: [id])
-  image      Image           @relation(fields: [imageId], references: [id])
-  collection Collection      @relation(fields: [collectionId], references: [id], onDelete: Cascade)
-  @@map("cardsets")
+  artists CardArtist[]
+  cards   CardItem[]
+  rarity  Rarity       @relation(fields: [rarityId], references: [id])
+  image   Image        @relation(fields: [imageId], references: [id])
+  set     Set?         @relation(fields: [setId], references: [id], onDelete: Cascade)
+  @@map("cards")
 }
 
 model Rarity {
@@ -169,20 +170,20 @@ model Rarity {
   label  String @db.VarChar(20)
   points Int
 
-  CardSet CardSet[]
+  cards Card[]
   @@map("rarities")
 }
 
-model CardSetArtist {
-  setId    Int
+model CardArtist {
+  cardId   Int
   artistId Int
 
-  set    CardSet @relation(fields: [setId], references: [id], onDelete: Cascade)
-  artist Artist  @relation(fields: [artistId], references: [id])
+  card   Card   @relation(fields: [cardId], references: [id], onDelete: Cascade)
+  artist Artist @relation(fields: [artistId], references: [id])
 
-  @@id([setId, artistId])
-  @@unique([setId, artistId])
-  @@map("cardset_artists")
+  @@id([cardId, artistId])
+  @@unique([cardId, artistId])
+  @@map("card_artists")
 }
 
 model TradeOffer {
@@ -215,7 +216,7 @@ model TradePiece {
   isLocked     Boolean @default(false) // Whether or not this card can be removed from subsequest counter offers
 
 
-  card    Card       @relation(fields: [cardId], references: [id])
+  card    CardItem   @relation(fields: [cardId], references: [id])
   offer   TradeOffer @relation(fields: [tradeOfferId], references: [id])
   account Account    @relation(fields: [accountId], references: [id])
 
@@ -232,7 +233,7 @@ model Image {
   uploader Account   @relation(fields: [uploaderId], references: [id])
   company  Company[]
   artists  Artist[]
-  sets     CardSet[]
+  cards    Card[]
 
   eras Era[]
 

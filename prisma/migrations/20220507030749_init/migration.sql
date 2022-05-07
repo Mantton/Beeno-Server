@@ -36,7 +36,8 @@ CREATE TABLE "groups" (
     "id" SERIAL NOT NULL,
     "name" VARCHAR(30) NOT NULL,
     "companyId" INTEGER NOT NULL,
-    "imageId" INTEGER,
+    "bannerImageId" INTEGER,
+    "logoImageId" INTEGER,
 
     CONSTRAINT "groups_pkey" PRIMARY KEY ("id")
 );
@@ -44,12 +45,19 @@ CREATE TABLE "groups" (
 -- CreateTable
 CREATE TABLE "artists" (
     "id" SERIAL NOT NULL,
-    "groupId" INTEGER,
     "companyId" INTEGER NOT NULL,
     "name" VARCHAR(20) NOT NULL,
     "imageId" INTEGER,
 
     CONSTRAINT "artists_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "group_artists" (
+    "artistId" INTEGER NOT NULL,
+    "groupId" INTEGER NOT NULL,
+
+    CONSTRAINT "group_artists_pkey" PRIMARY KEY ("artistId","groupId")
 );
 
 -- CreateTable
@@ -59,57 +67,57 @@ CREATE TABLE "eras" (
     "startDate" TIMESTAMP(3),
     "groupId" INTEGER,
     "artistId" INTEGER,
+    "imageId" INTEGER,
 
     CONSTRAINT "eras_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
-CREATE TABLE "cards" (
+CREATE TABLE "cards_items" (
     "id" SERIAL NOT NULL,
     "ownerId" INTEGER,
     "iteration" INTEGER NOT NULL,
-    "setId" INTEGER NOT NULL,
+    "cardId" INTEGER NOT NULL,
+
+    CONSTRAINT "cards_items_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "sets" (
+    "id" SERIAL NOT NULL,
+    "title" VARCHAR(50) NOT NULL,
+    "eraId" INTEGER NOT NULL,
+
+    CONSTRAINT "sets_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "cards" (
+    "id" SERIAL NOT NULL,
+    "created" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "rarityId" INTEGER NOT NULL,
+    "imageId" INTEGER NOT NULL,
+    "setId" INTEGER,
+    "published" BOOLEAN NOT NULL DEFAULT false,
 
     CONSTRAINT "cards_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
-CREATE TABLE "collections" (
+CREATE TABLE "rarities" (
     "id" SERIAL NOT NULL,
-    "title" VARCHAR(50) NOT NULL,
-    "eraId" INTEGER NOT NULL,
+    "label" VARCHAR(20) NOT NULL,
+    "points" INTEGER NOT NULL,
 
-    CONSTRAINT "collections_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "rarities_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
-CREATE TABLE "cardsets" (
-    "id" SERIAL NOT NULL,
-    "title" VARCHAR(50) NOT NULL,
-    "minted" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "rarityId" INTEGER NOT NULL,
-    "imageId" INTEGER NOT NULL,
-    "collectionId" INTEGER NOT NULL,
-
-    CONSTRAINT "cardsets_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "cardset_artists" (
-    "setId" INTEGER NOT NULL,
+CREATE TABLE "card_artists" (
+    "cardId" INTEGER NOT NULL,
     "artistId" INTEGER NOT NULL,
 
-    CONSTRAINT "cardset_artists_pkey" PRIMARY KEY ("setId","artistId")
-);
-
--- CreateTable
-CREATE TABLE "rarity" (
-    "id" SERIAL NOT NULL,
-    "label" VARCHAR(18) NOT NULL,
-    "points" INTEGER NOT NULL,
-    "hex" VARCHAR(6) NOT NULL,
-
-    CONSTRAINT "rarity_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "card_artists_pkey" PRIMARY KEY ("cardId","artistId")
 );
 
 -- CreateTable
@@ -167,25 +175,13 @@ CREATE UNIQUE INDEX "companies_name_key" ON "companies"("name");
 CREATE UNIQUE INDEX "groups_name_key" ON "groups"("name");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "artists_name_groupId_key" ON "artists"("name", "groupId");
-
--- CreateIndex
 CREATE UNIQUE INDEX "eras_title_groupId_key" ON "eras"("title", "groupId");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "cards_setId_iteration_key" ON "cards"("setId", "iteration");
+CREATE UNIQUE INDEX "cards_items_cardId_iteration_key" ON "cards_items"("cardId", "iteration");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "cardset_artists_setId_artistId_key" ON "cardset_artists"("setId", "artistId");
-
--- CreateIndex
-CREATE UNIQUE INDEX "rarity_id_key" ON "rarity"("id");
-
--- CreateIndex
-CREATE UNIQUE INDEX "rarity_label_key" ON "rarity"("label");
-
--- CreateIndex
-CREATE UNIQUE INDEX "rarity_points_key" ON "rarity"("points");
+CREATE UNIQUE INDEX "card_artists_cardId_artistId_key" ON "card_artists"("cardId", "artistId");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "trade_offers_id_key" ON "trade_offers"("id");
@@ -209,16 +205,22 @@ ALTER TABLE "companies" ADD CONSTRAINT "companies_imageId_fkey" FOREIGN KEY ("im
 ALTER TABLE "groups" ADD CONSTRAINT "groups_companyId_fkey" FOREIGN KEY ("companyId") REFERENCES "companies"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "groups" ADD CONSTRAINT "groups_imageId_fkey" FOREIGN KEY ("imageId") REFERENCES "images"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "groups" ADD CONSTRAINT "groups_bannerImageId_fkey" FOREIGN KEY ("bannerImageId") REFERENCES "images"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "groups" ADD CONSTRAINT "groups_logoImageId_fkey" FOREIGN KEY ("logoImageId") REFERENCES "images"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "artists" ADD CONSTRAINT "artists_companyId_fkey" FOREIGN KEY ("companyId") REFERENCES "companies"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "artists" ADD CONSTRAINT "artists_imageId_fkey" FOREIGN KEY ("imageId") REFERENCES "images"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "artists" ADD CONSTRAINT "artists_groupId_fkey" FOREIGN KEY ("groupId") REFERENCES "groups"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "group_artists" ADD CONSTRAINT "group_artists_groupId_fkey" FOREIGN KEY ("groupId") REFERENCES "groups"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "artists" ADD CONSTRAINT "artists_companyId_fkey" FOREIGN KEY ("companyId") REFERENCES "companies"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "group_artists" ADD CONSTRAINT "group_artists_artistId_fkey" FOREIGN KEY ("artistId") REFERENCES "artists"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "eras" ADD CONSTRAINT "eras_groupId_fkey" FOREIGN KEY ("groupId") REFERENCES "groups"("id") ON DELETE SET NULL ON UPDATE CASCADE;
@@ -227,28 +229,31 @@ ALTER TABLE "eras" ADD CONSTRAINT "eras_groupId_fkey" FOREIGN KEY ("groupId") RE
 ALTER TABLE "eras" ADD CONSTRAINT "eras_artistId_fkey" FOREIGN KEY ("artistId") REFERENCES "artists"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "cards" ADD CONSTRAINT "cards_ownerId_fkey" FOREIGN KEY ("ownerId") REFERENCES "accounts"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "eras" ADD CONSTRAINT "eras_imageId_fkey" FOREIGN KEY ("imageId") REFERENCES "images"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "cards" ADD CONSTRAINT "cards_setId_fkey" FOREIGN KEY ("setId") REFERENCES "cardsets"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "cards_items" ADD CONSTRAINT "cards_items_ownerId_fkey" FOREIGN KEY ("ownerId") REFERENCES "accounts"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "collections" ADD CONSTRAINT "collections_eraId_fkey" FOREIGN KEY ("eraId") REFERENCES "eras"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "cards_items" ADD CONSTRAINT "cards_items_cardId_fkey" FOREIGN KEY ("cardId") REFERENCES "cards"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "cardsets" ADD CONSTRAINT "cardsets_rarityId_fkey" FOREIGN KEY ("rarityId") REFERENCES "rarity"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "sets" ADD CONSTRAINT "sets_eraId_fkey" FOREIGN KEY ("eraId") REFERENCES "eras"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "cardsets" ADD CONSTRAINT "cardsets_imageId_fkey" FOREIGN KEY ("imageId") REFERENCES "images"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "cards" ADD CONSTRAINT "cards_setId_fkey" FOREIGN KEY ("setId") REFERENCES "sets"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "cardsets" ADD CONSTRAINT "cardsets_collectionId_fkey" FOREIGN KEY ("collectionId") REFERENCES "collections"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "cards" ADD CONSTRAINT "cards_rarityId_fkey" FOREIGN KEY ("rarityId") REFERENCES "rarities"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "cardset_artists" ADD CONSTRAINT "cardset_artists_setId_fkey" FOREIGN KEY ("setId") REFERENCES "cardsets"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "cards" ADD CONSTRAINT "cards_imageId_fkey" FOREIGN KEY ("imageId") REFERENCES "images"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "cardset_artists" ADD CONSTRAINT "cardset_artists_artistId_fkey" FOREIGN KEY ("artistId") REFERENCES "artists"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "card_artists" ADD CONSTRAINT "card_artists_artistId_fkey" FOREIGN KEY ("artistId") REFERENCES "artists"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "card_artists" ADD CONSTRAINT "card_artists_cardId_fkey" FOREIGN KEY ("cardId") REFERENCES "cards"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "trade_offers" ADD CONSTRAINT "trade_offers_initiatorId_fkey" FOREIGN KEY ("initiatorId") REFERENCES "accounts"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -260,13 +265,13 @@ ALTER TABLE "trade_offers" ADD CONSTRAINT "trade_offers_recipientId_fkey" FOREIG
 ALTER TABLE "trade_offers" ADD CONSTRAINT "trade_offers_initialTradeId_fkey" FOREIGN KEY ("initialTradeId") REFERENCES "trade_offers"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "trade_pieces" ADD CONSTRAINT "trade_pieces_cardId_fkey" FOREIGN KEY ("cardId") REFERENCES "cards"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "trade_pieces" ADD CONSTRAINT "trade_pieces_accountId_fkey" FOREIGN KEY ("accountId") REFERENCES "accounts"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "trade_pieces" ADD CONSTRAINT "trade_pieces_cardId_fkey" FOREIGN KEY ("cardId") REFERENCES "cards_items"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "trade_pieces" ADD CONSTRAINT "trade_pieces_tradeOfferId_fkey" FOREIGN KEY ("tradeOfferId") REFERENCES "trade_offers"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "trade_pieces" ADD CONSTRAINT "trade_pieces_accountId_fkey" FOREIGN KEY ("accountId") REFERENCES "accounts"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "images" ADD CONSTRAINT "images_uploaderId_fkey" FOREIGN KEY ("uploaderId") REFERENCES "accounts"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
