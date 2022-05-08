@@ -26,6 +26,8 @@ model Account {
   privileges     Privilege[]
   uploadedImages Image[]
   credentials    Credential[]
+  favorites      CardFavorite[]
+
   @@map("accounts")
 }
 
@@ -116,9 +118,29 @@ model Era {
   group  Group?  @relation(fields: [groupId], references: [id])
   artist Artist? @relation(fields: [artistId], references: [id])
   sets   Set[]
+  cards  Card[]
   @@unique([title, groupId])
   @@map("eras")
-  Card Card[]
+}
+
+// * Cards
+model Card {
+  id      Int      @id @default(autoincrement())
+  created DateTime @default(now())
+
+  rarityId  Int
+  imageId   Int
+  setId     Int?
+  eraId     Int
+  artists   CardArtist[]
+  items     CardItem[]
+  rarity    Rarity         @relation(fields: [rarityId], references: [id])
+  image     Image          @relation(fields: [imageId], references: [id])
+  set       Set?           @relation(fields: [setId], references: [id], onDelete: Cascade)
+  era       Era            @relation(fields: [eraId], references: [id], onDelete: Cascade)
+  favorites CardFavorite[]
+
+  @@map("cards")
 }
 
 // Individual Card Item
@@ -149,25 +171,6 @@ model Set {
   @@map("sets")
 }
 
-model Card {
-  id      Int      @id @default(autoincrement())
-  created DateTime @default(now())
-
-  rarityId  Int
-  imageId   Int
-  setId     Int?
-  eraId     Int
-  published Boolean @default(false)
-
-  artists CardArtist[]
-  cards   CardItem[]
-  rarity  Rarity       @relation(fields: [rarityId], references: [id])
-  image   Image        @relation(fields: [imageId], references: [id])
-  set     Set?         @relation(fields: [setId], references: [id], onDelete: Cascade)
-  era     Era          @relation(fields: [eraId], references: [id], onDelete: Cascade)
-  @@map("cards")
-}
-
 model Rarity {
   id     Int    @id @default(autoincrement())
   label  String @db.VarChar(20)
@@ -189,16 +192,39 @@ model CardArtist {
   @@map("card_artists")
 }
 
+model CardFavorite {
+  cardId    Int
+  accountId Int
+  card      Card    @relation(fields: [cardId], references: [id])
+  account   Account @relation(fields: [accountId], references: [id])
+
+  @@unique([cardId, accountId])
+}
+
+//* ----------      TRADES       ---------- *//
+model TradeType {
+  id     Int          @id @default(autoincrement())
+  label  String       @db.VarChar(15)
+  offers TradeOffer[]
+}
+
+model TradeStatus {
+  id     Int          @id @default(autoincrement())
+  label  String       @db.VarChar(15)
+  offers TradeOffer[]
+}
+
 model TradeOffer {
-  id                   Int      @id @unique @default(autoincrement())
+  id                   Int       @id @unique @default(autoincrement())
   initiatorId          Int
   recipientId          Int
-  initationTimestamp   DateTime @default(now()) // Initation Time 
-  convocationTimestamp DateTime // Convocation Time i.e the timestamp for when the recipient makes a decision on the offer
+  initationTimestamp   DateTime  @default(now()) // Initation Time 
+  convocationTimestamp DateTime? // Convocation Time i.e the timestamp for when the recipient makes a decision on the offer
 
   initialTradeId Int?
-  type           Int // Initial Offer, Locked Initial Offer, Counter Offer, Locked Counter Offer
-  status         Int // Accepted, Denied, Countered ,Stale (i.e A card mentioned in this transaction has already transferred ownershi)
+  tradeType      Int
+  isLocked       Boolean // Indicates whether a trade offer can be countered
+  tradeStatus    Int
 
   initiator Account @relation("initiator", fields: [initiatorId], references: [id]) // Person Initiating / Sending 
   recipient Account @relation("recipient", fields: [recipientId], references: [id]) // Person Receiving the specified card
@@ -206,7 +232,8 @@ model TradeOffer {
   parentTradeOffer      TradeOffer?  @relation("TradeToTrade", fields: [initialTradeId], references: [id])
   subsequentTradeOffers TradeOffer[] @relation("TradeToTrade")
 
-
+  type   TradeType    @relation(fields: [tradeType], references: [id])
+  status TradeStatus  @relation(fields: [tradeStatus], references: [id])
   pieces TradePiece[]
 
   @@map("trade_offers")
@@ -228,6 +255,7 @@ model TradePiece {
   @@map("trade_pieces")
 }
 
+// * Image
 model Image {
   id         Int    @id @unique @default(autoincrement())
   base       String
@@ -245,18 +273,3 @@ model Image {
   logoGroups   Group[] @relation("logo_image")
   @@map("images")
 }
-
-// Packs
-// model CompanyPack {
-//   id      Int @id @default(autoincrement())
-//   ownerId
-// }
-
-//TODO: model that allows users to vote on rarity delegation
-
-// Reference Table for Publish Status
-// Deleted, Published, Not Published
-// model PublishStatus {
-//   id  Int @id
-//   label String @db.VarChar(15)
-// }

@@ -12,17 +12,17 @@ export const randomNumber = (min: number, max: number) => {
  * @param name name of the rarity
  * @returns the number of cards of this rarity
  */
-export const getIterations = (name: string): number => {
-  switch (name.toLowerCase()) {
-    case "legendary":
+export const getIterations = (id: number): number => {
+  switch (id) {
+    case 4:
       return 10;
-    case "ultra rare":
+    case 3:
       return 50;
-    case "rare":
+    case 2:
       return 250;
-    case "uncommon":
+    case 1:
       return 450;
-    case "common":
+    case 0:
     default:
       return 750;
   }

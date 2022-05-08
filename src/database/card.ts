@@ -1,5 +1,6 @@
 import { database } from "../helpers";
 import { assignRarity } from "../services";
+import { getIterations } from "../utils";
 
 export const insertCardRecord = async (
   eraId: number,
@@ -21,16 +22,29 @@ export const insertCardRecord = async (
         setId,
         rarityId,
         imageId,
+
+        // Artists
+        artists: {
+          createMany: {
+            data: artistIds.map((artistId) => ({ artistId })),
+          },
+        },
+        // Card Items
+        items: {
+          createMany: {
+            // Reference: https://stackoverflow.com/a/33352604
+            data: Array.from(
+              { length: getIterations(rarityId) },
+              (_, i) => i + 1
+            ).map((iteration) => ({
+              iteration,
+            })),
+          },
+        },
       },
     });
 
-    // Query, See : https://www.prisma.io/docs/concepts/components/prisma-client/crud#create-multiple-records
-    const dataMap = artistIds.map((id) => ({ artistId: id, cardId: card.id }));
-
-    // Create Artist Records
-    await repo.cardArtist.createMany({
-      data: dataMap,
-    });
+    // Create Items
 
     return card;
   });

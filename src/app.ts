@@ -16,6 +16,7 @@ import { morganLogger } from "./utils/morgan";
 import { groupRouter } from "./routes/group";
 import { seedRarities } from "./database/rarity";
 import { EraRouter } from "./routes/era";
+import { setTradeStatusAndTypes } from "./database/trade";
 
 const app = express();
 // app.options("*", cors({origin: []}));
@@ -70,6 +71,7 @@ createSuperUser().catch((err) => {
 });
 
 seedRarities();
+setTradeStatusAndTypes();
 
 // Routes
 app.use("/company", companyRouter);

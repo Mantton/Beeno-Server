@@ -21,3 +21,5 @@ export enum rarities {
 export const cleanRarities = Object.keys(rarities)
   .filter((key: any) => isNaN(Number(rarities[key])))
   .map((x) => parseInt(x));
+
+export const LOG_QUERIES = false;
