@@ -92,6 +92,7 @@ export const fetchEraRecord = async (eraId: number): Promise<IEra | null> => {
               base: true,
             },
           },
+          created: true,
           artists: {
             select: {
               artist: {
@@ -183,6 +184,7 @@ WHERE "cards"."eraId" = ${era.id}`;
           onTradeHub: 0,
           owned: ownership.ownedCount,
         },
+        created: data.created,
       };
     }),
   };
