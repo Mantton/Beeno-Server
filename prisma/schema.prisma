@@ -255,6 +255,8 @@ model TradePiece {
   @@map("trade_pieces")
 }
 
+// TODO: Table for Indicating the item is available to trade
+
 // * Image
 model Image {
   id         Int    @id @unique @default(autoincrement())

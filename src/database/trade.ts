@@ -18,6 +18,7 @@ export async function setTradeStatusAndTypes() {
     { id: 2, label: "Denied" },
     { id: 3, label: "Countered" },
     { id: 4, label: "Stale" }, // i.e The Target Card has already been transferred
+    { id: 5, label: "Active" },
   ];
 
   database.$transaction(async (database) => {
